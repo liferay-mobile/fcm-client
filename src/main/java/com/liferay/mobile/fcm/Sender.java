@@ -16,7 +16,7 @@ package com.liferay.mobile.fcm;
 
 import com.google.gson.Gson;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -35,9 +35,9 @@ public class Sender {
 		this.key = key;
 	}
 
-	public Observable<Response> send(Message message) {
-		return Observable.defer(() ->
-			Observable.just(client.newCall(createRequest(message)).execute())
+	public Single<Response> send(Message message) {
+		return Single.fromCallable(() ->
+			client.newCall(createRequest(message)).execute()
 		);
 	}
 
