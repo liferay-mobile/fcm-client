@@ -37,7 +37,7 @@ public class SenderTest {
 
 	@Test
 	public void testRequestBody() throws IOException {
-		Sender sender = new Sender(key);
+		Sender sender = new Sender(config.key);
 		Message message = createMessage(createData());
 		Request request = sender.createRequest(message);
 
@@ -53,25 +53,25 @@ public class SenderTest {
 	}
 
 	@Test
-	public void testRequestHeaders() throws IOException {
-		Sender sender = new Sender(key);
+	public void testRequestHeaders() {
+		Sender sender = new Sender(config.key);
 		Request request = sender.createRequest(createMessage(createData()));
 		String body = request.body().contentType().toString();
 
-		assertEquals("key=" + key, request.header(Sender.AUTHORIZATION));
+		assertEquals("key=" + config.key, request.header(Sender.AUTHORIZATION));
 		assertEquals("application/json; charset=utf-8", body);
 	}
 
 	@Test
 	public void testRequestURL() {
-		Sender sender = new Sender(key);
+		Sender sender = new Sender(config.key);
 		Request request = sender.createRequest(createMessage(createData()));
 		assertEquals(Sender.URL, request.url().toString());
 	}
 
 	@Test
 	public void testResponseStatus() throws IOException {
-		Sender sender = new Sender(key);
+		Sender sender = new Sender(config.key);
 		Message message = createMessage(createData());
 		Response response = sender.send(message);
 
@@ -87,13 +87,11 @@ public class SenderTest {
 
 	private Message createMessage(Map data) {
 		return new Message.Builder()
-			.to(token)
+			.to(config.token)
 			.data(data)
 			.build();
 	}
 
-	private final String key = "key";
-
-	private final String token = "token";
+	private final Config config = new Config();
 
 }

@@ -30,10 +30,6 @@ import okhttp3.Response;
 
 public class Sender {
 
-	public static final String AUTHORIZATION = "Authorization";
-
-	public static final String URL = "https://fcm.googleapis.com/fcm/send";
-
 	public Sender(String key) {
 		this.client = new OkHttpClient();
 		this.key = key;
@@ -44,7 +40,7 @@ public class Sender {
 		return client.newCall(request).execute();
 	}
 
-	Request createRequest(Message message) {
+	protected Request createRequest(Message message) {
 		RequestBody body = RequestBody.create(
 			contentType, gson.toJson(message));
 
@@ -55,12 +51,16 @@ public class Sender {
 			.build();
 	}
 
-	private final OkHttpClient client;
+	protected static final String AUTHORIZATION = "Authorization";
 
-	private final MediaType contentType = MediaType.parse("application/json");
+	protected static final String URL = "https://fcm.googleapis.com/fcm/send";
 
-	private final Gson gson = new Gson();
+	protected final OkHttpClient client;
 
-	private final String key;
+	protected final MediaType contentType = MediaType.parse("application/json");
+
+	protected final Gson gson = new Gson();
+
+	protected final String key;
 
 }
