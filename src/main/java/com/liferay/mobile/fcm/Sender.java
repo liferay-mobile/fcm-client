@@ -16,7 +16,7 @@ package com.liferay.mobile.fcm;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
+import io.reactivex.Observable;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -35,9 +35,10 @@ public class Sender {
 		this.key = key;
 	}
 
-	public Response send(Message message) throws IOException {
-		Request request = createRequest(message);
-		return client.newCall(request).execute();
+	public Observable<Response> send(Message message) {
+		return Observable.defer(() ->
+			Observable.just(client.newCall(createRequest(message)).execute())
+		);
 	}
 
 	protected Request createRequest(Message message) {

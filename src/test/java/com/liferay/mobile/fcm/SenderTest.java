@@ -28,7 +28,6 @@ import okhttp3.Response;
 import okio.Buffer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Bruno Farache
@@ -70,13 +69,17 @@ public class SenderTest {
 	}
 
 	@Test
-	public void testResponseStatus() throws IOException {
+	public void testResponseStatus() {
 		Sender sender = new Sender(config.key);
 		Message message = createMessage(createData());
-		Response response = sender.send(message);
 
-		assertTrue(response.isSuccessful());
-		assertEquals(200, response.code());
+		sender
+			.send(message)
+			.test()
+			.assertValue(Response::isSuccessful)
+			.assertValue(response -> (200 == response.code()))
+			.assertNoErrors()
+			.assertComplete();
 	}
 
 	private Map createData() {
