@@ -23,6 +23,10 @@ public class Message {
 		return data;
 	}
 
+	public Notification notification() {
+		return notification;
+	}
+
 	public String to() {
 		return to;
 	}
@@ -31,6 +35,11 @@ public class Message {
 
 		public Builder data(Object data) {
 			this.data = data;
+			return this;
+		}
+
+		public Builder notification(Notification notification) {
+			this.notification = notification;
 			return this;
 		}
 
@@ -44,16 +53,19 @@ public class Message {
 		}
 
 		protected Object data;
+		protected Notification notification;
 		protected String to;
 
 	}
 
 	protected Message(Builder builder) {
 		this.data = builder.data;
+		this.notification = builder.notification;
 		this.to = builder.to;
 	}
 
 	protected final Object data;
+	protected final Notification notification;
 	protected final String to;
 
 }

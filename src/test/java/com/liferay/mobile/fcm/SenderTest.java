@@ -24,7 +24,6 @@ import java.util.Map;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import okio.Buffer;
 
@@ -67,17 +66,6 @@ public class SenderTest {
 		Sender sender = new Sender(config.key);
 		Request request = sender.createRequest(createMessage(createData()));
 		assertEquals(Sender.URL, request.url().toString());
-	}
-
-	@Test
-	public void testResponseStatus() {
-		Sender sender = new Sender(config.key);
-		sender
-			.send(createMessage(createData()))
-			.test()
-			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.code()))
-			.assertNoErrors();
 	}
 
 	private Map createData() {
