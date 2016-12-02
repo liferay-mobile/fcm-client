@@ -2,6 +2,7 @@ group 'com.liferay.mobile'
 version '0.1'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 

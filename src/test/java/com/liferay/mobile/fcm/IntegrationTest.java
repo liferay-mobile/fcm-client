@@ -14,12 +14,16 @@
 
 package com.liferay.mobile.fcm;
 
+import com.google.gson.Gson;
+
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Response;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Bruno Farache
@@ -29,7 +33,6 @@ public class IntegrationTest {
 	@Test
 	public void testSendMessage() {
 		Sender sender = new Sender(config.key);
-
 		Map<String, String> data = new HashMap<>();
 		data.put("foo", "bar");
 
@@ -37,6 +40,18 @@ public class IntegrationTest {
 			.to(config.token)
 			.data(data)
 			.build();
+
+		String json = new Gson().toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"data\":{\"foo\":\"bar\"}," +
+				"\"to\":\"" + config.token+ "\"" +
+			"}",
+			json);
+
+		assertEquals(config.token, message.to());
+		assertEquals(data, message.data());
 
 		sender
 			.send(message)
@@ -59,6 +74,18 @@ public class IntegrationTest {
 			.to(config.token)
 			.notification(notification)
 			.build();
+
+		String json = new Gson().toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"notification\":{\"body\":\"bar\",\"title\":\"foo\"}," +
+				"\"to\":\"" + config.token + "\"" +
+			"}",
+			json);
+
+		assertEquals(config.token, message.to());
+		assertEquals(notification, message.notification());
 
 		sender
 			.send(message)

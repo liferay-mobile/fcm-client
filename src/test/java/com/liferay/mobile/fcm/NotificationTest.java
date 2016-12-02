@@ -38,6 +38,43 @@ public class NotificationTest {
 	}
 
 	@Test
+	public void testNotificationWithAllProperties() {
+		Notification notification = new Notification.Builder()
+			.badge("badge")
+			.body("body")
+			.clickAction("action")
+			.color("#000000")
+			.icon("icon")
+			.sound("sound")
+			.tag("tag")
+			.title("title")
+			.build();
+
+		assertEquals("badge", notification.badge());
+		assertEquals("body", notification.body());
+		assertEquals("action", notification.clickAction());
+		assertEquals("#000000", notification.color());
+		assertEquals("icon", notification.icon());
+		assertEquals("sound", notification.sound());
+		assertEquals("tag", notification.tag());
+		assertEquals("title", notification.title());
+
+		String json = new Gson().toJson(notification);
+
+		assertEquals(json,
+		"{" +
+			"\"badge\":\"badge\"," +
+			"\"body\":\"body\"," +
+			"\"click_action\":\"action\"," +
+			"\"color\":\"#000000\"," +
+			"\"icon\":\"icon\"," +
+			"\"sound\":\"sound\"," +
+			"\"tag\":\"tag\"," +
+			"\"title\":\"title\"" +
+		"}");
+	}
+
+	@Test
 	public void testNotificationWithClickAction() {
 		Notification notification = new Notification.Builder()
 			.clickAction("action")
