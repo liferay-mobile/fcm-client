@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author Bruno Farache
  */
@@ -27,8 +29,27 @@ public class Message {
 		return notification;
 	}
 
+	public Priority priority() {
+		return priority;
+	}
+
 	public String to() {
 		return to;
+	}
+
+	public enum Priority {
+
+		@SerializedName("normal")
+		NORMAL,
+
+		@SerializedName("high")
+		HIGH;
+
+		@Override
+		public String toString() {
+			return name().toLowerCase();
+		}
+
 	}
 
 	public static class Builder {
@@ -43,6 +64,11 @@ public class Message {
 			return this;
 		}
 
+		public Builder priority(Priority priority) {
+			this.priority = priority;
+			return this;
+		}
+
 		public Builder to(String to) {
 			this.to = to;
 			return this;
@@ -54,6 +80,7 @@ public class Message {
 
 		protected Object data;
 		protected Notification notification;
+		protected Priority priority;
 		protected String to;
 
 	}
@@ -61,11 +88,13 @@ public class Message {
 	protected Message(Builder builder) {
 		this.data = builder.data;
 		this.notification = builder.notification;
+		this.priority = builder.priority;
 		this.to = builder.to;
 	}
 
 	protected final Object data;
 	protected final Notification notification;
+	protected final Priority priority;
 	protected final String to;
 
 }
