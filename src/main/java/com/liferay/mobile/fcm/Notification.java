@@ -29,6 +29,14 @@ public class Notification {
 		return body;
 	}
 
+	public String bodyLocalizationKey() {
+		return bodyLocalizationKey;
+	}
+
+	public String[] bodyLocalizationArguments() {
+		return bodyLocalizationArguments;
+	}
+
 	public String clickAction() {
 		return clickAction;
 	}
@@ -53,6 +61,14 @@ public class Notification {
 		return title;
 	}
 
+	public String titleLocalizationKey() {
+		return titleLocalizationKey;
+	}
+
+	public String[] titleLocalizationArguments() {
+		return titleLocalizationArguments;
+	}
+
 	public static class Builder {
 
 		public Builder badge(String badge) {
@@ -62,6 +78,18 @@ public class Notification {
 
 		public Builder body(String body) {
 			this.body = body;
+			return this;
+		}
+
+		public Builder bodyLocalizationKey(String bodyLocalizationKey) {
+			this.bodyLocalizationKey = bodyLocalizationKey;
+			return this;
+		}
+
+		public Builder bodyLocalizationArguments(
+			String... bodyLocalizationArguments) {
+
+			this.bodyLocalizationArguments = bodyLocalizationArguments;
 			return this;
 		}
 
@@ -95,34 +123,58 @@ public class Notification {
 			return this;
 		}
 
+		public Builder titleLocalizationKey(String titleLocalizationKey) {
+			this.titleLocalizationKey = titleLocalizationKey;
+			return this;
+		}
+
+		public Builder titleLocalizationArguments(
+			String... titleLocalizationArguments) {
+
+			this.titleLocalizationArguments = titleLocalizationArguments;
+			return this;
+		}
+
 		public Notification build() {
 			return new Notification(this);
 		}
 
 		protected String badge;
 		protected String body;
+		protected String bodyLocalizationKey;
+		protected String[] bodyLocalizationArguments;
 		protected String clickAction;
 		protected String color;
 		protected String icon;
 		protected String sound;
 		protected String tag;
 		protected String title;
+		protected String titleLocalizationKey;
+		protected String[] titleLocalizationArguments;
 
 	}
 
 	protected Notification(Builder builder) {
 		this.badge = builder.badge;
 		this.body = builder.body;
+		this.bodyLocalizationKey = builder.bodyLocalizationKey;
+		this.bodyLocalizationArguments = builder.bodyLocalizationArguments;
 		this.clickAction = builder.clickAction;
 		this.color = builder.color;
 		this.icon = builder.icon;
 		this.sound = builder.sound;
 		this.tag = builder.tag;
 		this.title = builder.title;
+		this.titleLocalizationKey = builder.titleLocalizationKey;
+		this.titleLocalizationArguments = builder.titleLocalizationArguments;
 	}
 
 	protected final String badge;
 	protected final String body;
+	@SerializedName("body_loc_key")
+	protected final String bodyLocalizationKey;
+	@SerializedName("body_loc_args")
+	protected final String[] bodyLocalizationArguments;
 	@SerializedName("click_action")
 	protected final String clickAction;
 	protected final String color;
@@ -130,5 +182,9 @@ public class Notification {
 	protected final String sound;
 	protected final String tag;
 	protected final String title;
+	@SerializedName("title_loc_key")
+	protected final String titleLocalizationKey;
+	@SerializedName("title_loc_args")
+	protected final String[] titleLocalizationArguments;
 
 }

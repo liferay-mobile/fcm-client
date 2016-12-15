@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -39,25 +40,51 @@ public class NotificationTest {
 
 	@Test
 	public void testNotificationWithAllProperties() {
+		String badge = "badge";
+		String body = "body";
+		String bodyLocalizationKey = "bodyLocalizationKey";
+		String[] bodyLocalizationArguments = {"foo", "bar"};
+		String action = "action";
+		String color = "#000000";
+		String icon = "icon";
+		String sound = "sound";
+		String tag = "tag";
+		String title = "title";
+		String titleLocalizationKey = "titleLocalizationKey";
+		String[] titleLocalizationArguments = {"bar", "foo"};
+
 		Notification notification = new Notification.Builder()
-			.badge("badge")
-			.body("body")
-			.clickAction("action")
-			.color("#000000")
-			.icon("icon")
-			.sound("sound")
-			.tag("tag")
-			.title("title")
+			.badge(badge)
+			.body(body)
+			.bodyLocalizationKey(bodyLocalizationKey)
+			.bodyLocalizationArguments(bodyLocalizationArguments)
+			.clickAction(action)
+			.color(color)
+			.icon(icon)
+			.sound(sound)
+			.tag(tag)
+			.title(title)
+			.titleLocalizationKey(titleLocalizationKey)
+			.titleLocalizationArguments(titleLocalizationArguments)
 			.build();
 
-		assertEquals("badge", notification.badge());
-		assertEquals("body", notification.body());
-		assertEquals("action", notification.clickAction());
-		assertEquals("#000000", notification.color());
-		assertEquals("icon", notification.icon());
-		assertEquals("sound", notification.sound());
-		assertEquals("tag", notification.tag());
-		assertEquals("title", notification.title());
+		assertEquals(badge, notification.badge());
+		assertEquals(body, notification.body());
+		assertEquals(bodyLocalizationKey, notification.bodyLocalizationKey());
+		assertArrayEquals(
+			bodyLocalizationArguments,
+			notification.bodyLocalizationArguments());
+		assertEquals(action, notification.clickAction());
+		assertEquals(color, notification.color());
+		assertEquals(icon, notification.icon());
+		assertEquals(sound, notification.sound());
+		assertEquals(tag, notification.tag());
+		assertEquals(title, notification.title());
+		assertEquals(
+				titleLocalizationKey, notification.titleLocalizationKey());
+		assertArrayEquals(
+			titleLocalizationArguments,
+			notification.titleLocalizationArguments());
 
 		String json = new Gson().toJson(notification);
 
@@ -65,12 +92,16 @@ public class NotificationTest {
 		"{" +
 			"\"badge\":\"badge\"," +
 			"\"body\":\"body\"," +
+			"\"body_loc_key\":\"bodyLocalizationKey\"," +
+			"\"body_loc_args\":[\"foo\",\"bar\"]," +
 			"\"click_action\":\"action\"," +
 			"\"color\":\"#000000\"," +
 			"\"icon\":\"icon\"," +
 			"\"sound\":\"sound\"," +
 			"\"tag\":\"tag\"," +
-			"\"title\":\"title\"" +
+			"\"title\":\"title\"," +
+			"\"title_loc_key\":\"titleLocalizationKey\"," +
+			"\"title_loc_args\":[\"bar\",\"foo\"]" +
 		"}");
 	}
 
