@@ -15,6 +15,7 @@
 package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Condition.Operator;
+import com.liferay.mobile.fcm.exception.InvalidTopicNameException;
 
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 public class TopicTest {
 
 	@Test
-	public void testTwoTopicsWithAnd() {
+	public void testTwoTopicsWithAnd() throws InvalidTopicNameException {
 		Topic topic = new Condition(
 			new Topic("a"), Operator.AND, new Topic("b"));
 
@@ -35,7 +36,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testTwoTopicsWithOr() {
+	public void testTwoTopicsWithOr() throws InvalidTopicNameException {
 		Topic topic = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
@@ -44,7 +45,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testThreeTopicsWithOr() {
+	public void testThreeTopicsWithOr() throws InvalidTopicNameException {
 		Topic left = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
@@ -57,7 +58,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testMessageWithCondition() {
+	public void testMessageWithCondition() throws InvalidTopicNameException {
 		Message message = new Message.Builder()
 			.to(new Condition(new Topic("a"), Operator.OR, new Topic("b")))
 			.build();
@@ -69,13 +70,18 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testMessageWithTopic() {
+	public void testMessageWithTopic() throws InvalidTopicNameException {
 		Message message = new Message.Builder()
 			.to(new Topic("a"))
 			.build();
 
 		String json = Sender.toJson(message);
 		assertEquals(json, "{\"to\":\"/topics/a\"}");
+	}
+
+	@Test(expected = InvalidTopicNameException.class)
+	public void testInvalidTopicName() throws InvalidTopicNameException {
+		new Topic("&");
 	}
 
 }
