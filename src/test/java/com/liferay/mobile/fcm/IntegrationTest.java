@@ -94,6 +94,39 @@ public class IntegrationTest {
 	}
 
 	@Test
+	public void testSendNotificationToTopic() throws Exception {
+		Sender sender = new Sender(config.key);
+
+		Notification notification = new Notification.Builder()
+			.title("news")
+			.build();
+
+		Message message = new Message.Builder()
+			.to(new Topic("news"))
+			.notification(notification)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"notification\":{\"title\":\"news\"}," +
+				"\"to\":\"/topics/news\"" +
+			"}",
+			json);
+
+		assertEquals("/topics/news", message.to());
+		assertEquals(notification, message.notification());
+
+		sender
+			.send(message)
+			.test()
+			.assertValue(Response::isSuccessful)
+			.assertValue(response -> (200 == response.code()))
+			.assertNoErrors();
+	}
+
+	@Test
 	public void testSendNotificationWithLocalizedTitleAndBody() {
 		Sender sender = new Sender(config.key);
 
