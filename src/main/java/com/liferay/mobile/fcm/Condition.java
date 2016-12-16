@@ -36,7 +36,7 @@ public class Condition extends Topic {
 
 
 	protected enum Operator {
-		AND(" && "), OR(" || ");
+		AND("&&"), OR("||");
 
 		Operator(String value) {
 			this.value = value;

@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.fcm;
 
-import com.google.gson.Gson;
-
 import com.liferay.mobile.fcm.Message.Priority;
 
 import org.junit.Test;

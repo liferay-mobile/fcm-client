@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.fcm;
 
-import com.google.gson.Gson;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
