@@ -21,6 +21,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Message {
 
+	public String condition() {
+		return condition;
+	}
+
 	public Object data() {
 		return data;
 	}
@@ -74,10 +78,22 @@ public class Message {
 			return this;
 		}
 
+		public Builder to(Topic topic) {
+			if (topic instanceof Condition) {
+				this.condition = topic.toString();
+			}
+			else {
+				this.to = "/topics/" + topic.name();
+			}
+
+			return this;
+		}
+
 		public Message build() {
 			return new Message(this);
 		}
 
+		protected String condition;
 		protected Object data;
 		protected Notification notification;
 		protected Priority priority;
@@ -86,12 +102,14 @@ public class Message {
 	}
 
 	protected Message(Builder builder) {
+		this.condition = builder.condition;
 		this.data = builder.data;
 		this.notification = builder.notification;
 		this.priority = builder.priority;
 		this.to = builder.to;
 	}
 
+	protected final String condition;
 	protected final Object data;
 	protected final Notification notification;
 	protected final Priority priority;

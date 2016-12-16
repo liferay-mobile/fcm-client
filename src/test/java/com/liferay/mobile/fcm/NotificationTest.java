@@ -33,7 +33,7 @@ public class NotificationTest {
 			.body("body")
 			.build();
 
-		String json = new Gson().toJson(notification);
+		String json = Sender.toJson(notification);
 
 		assertEquals(json, "{\"body\":\"body\",\"title\":\"title\"}");
 	}
@@ -86,7 +86,7 @@ public class NotificationTest {
 			titleLocalizationArguments,
 			notification.titleLocalizationArguments());
 
-		String json = new Gson().toJson(notification);
+		String json = Sender.toJson(notification);
 
 		assertEquals(json,
 		"{" +
@@ -111,7 +111,7 @@ public class NotificationTest {
 			.clickAction("action")
 			.build();
 
-		String json = new Gson().toJson(notification);
+		String json = Sender.toJson(notification);
 
 		assertEquals(json, "{\"click_action\":\"action\"}");
 	}

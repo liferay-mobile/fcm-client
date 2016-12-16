@@ -15,6 +15,7 @@
 package com.liferay.mobile.fcm;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import io.reactivex.Single;
 
@@ -43,13 +44,27 @@ public class Sender {
 
 	protected Request createRequest(Message message) {
 		RequestBody body = RequestBody.create(
-			contentType, gson.toJson(message));
+			contentType, toJson(message));
 
 		return new Request.Builder()
 			.url(URL)
 			.header(AUTHORIZATION, "key=" + key)
 			.post(body)
 			.build();
+	}
+
+	public static String toJson(Object object) {
+		return gson().toJson(object);
+	}
+
+	protected static Gson gson() {
+		if (gson == null) {
+			gson = new GsonBuilder()
+				.disableHtmlEscaping()
+				.create();
+		}
+
+		return gson;
 	}
 
 	protected static final String AUTHORIZATION = "Authorization";
@@ -60,7 +75,7 @@ public class Sender {
 
 	protected final MediaType contentType = MediaType.parse("application/json");
 
-	protected final Gson gson = new Gson();
+	protected static Gson gson;
 
 	protected final String key;
 

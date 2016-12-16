@@ -41,7 +41,7 @@ public class IntegrationTest {
 			.data(data)
 			.build();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -75,7 +75,7 @@ public class IntegrationTest {
 			.notification(notification)
 			.build();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -111,7 +111,7 @@ public class IntegrationTest {
 			.notification(notification)
 			.build();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(
 			"{" +

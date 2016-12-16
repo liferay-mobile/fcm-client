@@ -33,7 +33,7 @@ public class MessageTest {
 			.priority(Priority.HIGH)
 			.build();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(Priority.HIGH, Priority.valueOf("HIGH"));
 		assertEquals(Priority.HIGH.ordinal(), 1);
@@ -48,7 +48,7 @@ public class MessageTest {
 			.priority(Priority.NORMAL)
 			.build();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(Priority.NORMAL, Priority.valueOf("NORMAL"));
 		assertEquals(Priority.NORMAL.ordinal(), 0);

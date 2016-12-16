@@ -46,7 +46,7 @@ public class SenderTest {
 		body.writeTo(buffer);
 		String content = buffer.readUtf8();
 
-		String json = new Gson().toJson(message);
+		String json = Sender.toJson(message);
 
 		assertEquals(json, content);
 	}
