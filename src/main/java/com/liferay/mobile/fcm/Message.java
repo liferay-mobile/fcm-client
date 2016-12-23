@@ -78,14 +78,13 @@ public class Message {
 			return this;
 		}
 
-		public Builder to(To to) {
-			if (to instanceof Condition) {
-				this.condition = to.to();
-			}
-			else {
-				this.to = ((Topic)to).path();
-			}
+		public Builder to(Condition to) {
+			this.condition = to.to();
+			return this;
+		}
 
+		public Builder to(Topic to) {
+			this.to = to.path();
 			return this;
 		}
 
