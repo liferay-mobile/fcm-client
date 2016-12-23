@@ -28,33 +28,106 @@ public class TopicTest {
 
 	@Test
 	public void testTwoTopicsWithAnd() throws InvalidTopicNameException {
-		To topic = new Condition(
-			new Topic("a"), Operator.AND, new Topic("b"));
-
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To topic = new Condition(a, Operator.AND, b);
 		assertEquals(Operator.AND, Operator.valueOf("AND"));
-		assertEquals("'a' in topics && 'b' in topics", topic.to());
+
+		String expected = "'a' in topics && 'b' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).and(b);
+		assertEquals(expected, topic.to());
 	}
 
 	@Test
 	public void testTwoTopicsWithOr() throws InvalidTopicNameException {
-		To topic = new Condition(
-			new Topic("a"), Operator.OR, new Topic("b"));
-
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To topic = new Condition(a, Operator.OR, b);
 		assertEquals(Operator.OR, Operator.valueOf("OR"));
-		assertEquals("'a' in topics || 'b' in topics", topic.to());
+
+		String expected = "'a' in topics || 'b' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).or(b);
+		assertEquals(expected, topic.to());
+	}
+
+	@Test
+	public void testThreeTopicsWithAnd() throws InvalidTopicNameException {
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To left = new Condition(a, Operator.AND, b);
+
+		Topic c = new Topic("c");
+		To topic = new Condition(left, Operator.AND, c);
+
+		String expected = "'a' in topics && 'b' in topics && 'c' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(left).and(c);
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).and(b).and(c);
+		assertEquals(expected, topic.to());
+	}
+
+	@Test
+	public void testThreeTopicsWithAndOr() throws InvalidTopicNameException {
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To left = new Condition(a, Operator.AND, b);
+
+		Topic c = new Topic("c");
+		To topic = new Condition(left, Operator.OR, c);
+
+		String expected = "'a' in topics && 'b' in topics || 'c' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(left).or(c);
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).and(b).or(c);
+		assertEquals(expected, topic.to());
 	}
 
 	@Test
 	public void testThreeTopicsWithOr() throws InvalidTopicNameException {
-		To left = new Condition(
-			new Topic("a"), Operator.OR, new Topic("b"));
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To left = new Condition(a, Operator.OR, b);
 
-		Topic right = new Topic("c");
-		To topic = new Condition(left, Operator.OR, right);
+		Topic c = new Topic("c");
+		To topic = new Condition(left, Operator.OR, c);
 
-		assertEquals(
-			"'a' in topics || 'b' in topics || 'c' in topics",
-			topic.to());
+		String expected = "'a' in topics || 'b' in topics || 'c' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(left).or(c);
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).or(b).or(c);
+		assertEquals(expected, topic.to());
+	}
+
+	@Test
+	public void testThreeTopicsWithOrAnd() throws InvalidTopicNameException {
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		To left = new Condition(a, Operator.OR, b);
+
+		Topic c = new Topic("c");
+		To topic = new Condition(left, Operator.AND, c);
+
+		String expected = "'a' in topics || 'b' in topics && 'c' in topics";
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(left).and(c);
+		assertEquals(expected, topic.to());
+
+		topic = new Condition(a).or(b).and(c);
+		assertEquals(expected, topic.to());
 	}
 
 	@Test

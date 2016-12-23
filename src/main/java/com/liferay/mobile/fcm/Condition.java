@@ -25,6 +25,30 @@ public class Condition implements To {
 		this.right = right;
 	}
 
+	public Condition(To to) {
+		this.left = to;
+	}
+
+	public Condition and(To to) {
+		if (operator != null) {
+			left = new Condition(left, operator, right);
+		}
+
+		right = to;
+		operator = Operator.AND;
+		return this;
+	}
+
+	public Condition or(To to) {
+		if (operator != null) {
+			left = new Condition(left, operator, right);
+		}
+
+		right = to;
+		operator = Operator.OR;
+		return this;
+	}
+
 	@Override
 	public String to() {
 		return left.to() + " " + operator.value + " " + right.to();
@@ -35,7 +59,7 @@ public class Condition implements To {
 	protected To right;
 
 
-	protected enum Operator {
+	public enum Operator {
 		AND("&&"), OR("||");
 
 		Operator(String value) {
