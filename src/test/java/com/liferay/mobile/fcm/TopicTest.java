@@ -27,6 +27,23 @@ import static org.junit.Assert.assertEquals;
 public class TopicTest {
 
 	@Test
+	public void testConditionParentheses() throws InvalidTopicNameException {
+		Topic a = new Topic("a");
+		Topic b = new Topic("b");
+		Condition condition = new Condition(a, Operator.AND, b);
+		condition.parentheses();
+
+		String expected = "('a' in topics && 'b' in topics)";
+		assertEquals(expected, condition.to());
+
+		condition = new Condition(a).and(b).parentheses();
+		assertEquals(expected, condition.to());
+
+		condition = new Condition(condition).or(new Topic("c"));
+		assertEquals(expected + " || 'c' in topics", condition.to());
+	}
+
+	@Test
 	public void testTwoTopicsWithAnd() throws InvalidTopicNameException {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");

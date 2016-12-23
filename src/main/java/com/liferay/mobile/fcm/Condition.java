@@ -49,12 +49,34 @@ public class Condition implements To {
 		return this;
 	}
 
+	public Condition parentheses() {
+		parentheses = true;
+		return this;
+	}
+
 	@Override
 	public String to() {
-		return left.to() + " " + operator.value + " " + right.to();
+		StringBuilder sb = new StringBuilder();
+
+		if (parentheses) {
+			sb.append("(");
+		}
+
+		sb.append(left.to());
+		sb.append(" ");
+		sb.append(operator.value);
+		sb.append(" ");
+		sb.append(right.to());
+
+		if (parentheses) {
+			sb.append(")");
+		}
+
+		return sb.toString();
 	}
 
 	protected To left;
+	protected boolean parentheses;
 	protected Operator operator;
 	protected To right;
 
