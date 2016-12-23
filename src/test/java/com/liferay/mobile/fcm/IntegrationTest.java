@@ -97,12 +97,14 @@ public class IntegrationTest {
 	public void testSendNotificationToTopic() throws Exception {
 		Sender sender = new Sender(config.key);
 
+		String news = "news";
+
 		Notification notification = new Notification.Builder()
-			.title("news")
+			.title(news)
 			.build();
 
 		Message message = new Message.Builder()
-			.to(new Topic("news"))
+			.to(new Topic(news))
 			.notification(notification)
 			.build();
 
@@ -111,11 +113,11 @@ public class IntegrationTest {
 		assertEquals(
 			"{" +
 				"\"notification\":{\"title\":\"news\"}," +
-				"\"to\":\"/topics/news\"" +
+				"\"to\":\"/topics/" + news + "\"" +
 			"}",
 			json);
 
-		assertEquals("/topics/news", message.to());
+		assertEquals("/topics/" + news, message.to());
 		assertEquals(notification, message.notification());
 
 		sender
