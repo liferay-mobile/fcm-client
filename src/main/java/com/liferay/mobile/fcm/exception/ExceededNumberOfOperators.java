@@ -14,13 +14,15 @@
 
 package com.liferay.mobile.fcm.exception;
 
+import com.liferay.mobile.fcm.Condition;
+
 /**
  * @author Bruno Farache
  */
-public class InvalidTopicNameException extends Exception {
+public class ExceededNumberOfOperators extends Exception {
 
-	public InvalidTopicNameException(String name) {
-		super(String.format("Invalid topic name: %s", name));
+	public ExceededNumberOfOperators(Condition condition) {
+		super("Up to 2 operators per condition are allowed: " + condition.to());
 	}
 
 }

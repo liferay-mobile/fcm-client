@@ -53,7 +53,7 @@ public class Sender {
 			.build();
 	}
 
-	public static String toJson(Object object) {
+	protected static String toJson(Object object) {
 		return gson().toJson(object);
 	}
 

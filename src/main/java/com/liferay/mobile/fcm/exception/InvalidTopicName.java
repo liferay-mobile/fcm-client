@@ -12,36 +12,15 @@
  * details.
  */
 
-package com.liferay.mobile.fcm;
-
-import com.liferay.mobile.fcm.exception.InvalidTopicName;
+package com.liferay.mobile.fcm.exception;
 
 /**
  * @author Bruno Farache
  */
-public class Topic implements To {
+public class InvalidTopicName extends Exception {
 
-	public Topic(String name) throws InvalidTopicName {
-		if (!name.matches("[a-zA-Z0-9-_.~%]+")) {
-			throw new InvalidTopicName(name);
-		}
-
-		this.name = name;
+	public InvalidTopicName(String name) {
+		super("Invalid topic name: " + name);
 	}
-
-	public String name() {
-		return name;
-	}
-
-	public String path() {
-		return "/topics/" + name;
-	}
-
-	@Override
-	public String to() {
-		return String.format("'%s' in topics", name);
-	}
-
-	protected String name;
 
 }

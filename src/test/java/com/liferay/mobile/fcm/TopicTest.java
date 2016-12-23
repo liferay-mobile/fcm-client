@@ -15,11 +15,11 @@
 package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Condition.Operator;
-import com.liferay.mobile.fcm.exception.InvalidTopicNameException;
+import com.liferay.mobile.fcm.exception.InvalidTopicName;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * @author Bruno Farache
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 public class TopicTest {
 
 	@Test
-	public void testConditionParentheses() throws InvalidTopicNameException {
+	public void testConditionParentheses() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		Condition condition = new Condition(a, Operator.AND, b);
@@ -44,7 +44,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testTwoTopicsWithAnd() throws InvalidTopicNameException {
+	public void testTwoTopicsWithAnd() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To topic = new Condition(a, Operator.AND, b);
@@ -58,7 +58,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testTwoTopicsWithOr() throws InvalidTopicNameException {
+	public void testTwoTopicsWithOr() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To topic = new Condition(a, Operator.OR, b);
@@ -72,7 +72,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testThreeTopicsWithAnd() throws InvalidTopicNameException {
+	public void testThreeTopicsWithAnd() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To left = new Condition(a, Operator.AND, b);
@@ -91,7 +91,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testThreeTopicsWithAndOr() throws InvalidTopicNameException {
+	public void testThreeTopicsWithAndOr() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To left = new Condition(a, Operator.AND, b);
@@ -110,7 +110,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testThreeTopicsWithOr() throws InvalidTopicNameException {
+	public void testThreeTopicsWithOr() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To left = new Condition(a, Operator.OR, b);
@@ -129,7 +129,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testThreeTopicsWithOrAnd() throws InvalidTopicNameException {
+	public void testThreeTopicsWithOrAnd() throws Exception {
 		Topic a = new Topic("a");
 		Topic b = new Topic("b");
 		To left = new Condition(a, Operator.OR, b);
@@ -148,7 +148,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testMessageWithCondition() throws InvalidTopicNameException {
+	public void testMessageWithCondition() throws Exception {
 		Condition to = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
@@ -163,7 +163,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testMessageWithTopic() throws InvalidTopicNameException {
+	public void testMessageWithTopic() throws Exception {
 		String name = "a";
 		Topic to = new Topic(name);
 		assertEquals(name, to.name());
@@ -176,8 +176,8 @@ public class TopicTest {
 		assertEquals(json, "{\"to\":\"/topics/" + name + "\"}");
 	}
 
-	@Test(expected = InvalidTopicNameException.class)
-	public void testInvalidTopicName() throws InvalidTopicNameException {
+	@Test(expected = InvalidTopicName.class)
+	public void testInvalidTopicName() throws InvalidTopicName {
 		new Topic("&");
 	}
 
