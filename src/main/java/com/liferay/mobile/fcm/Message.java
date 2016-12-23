@@ -78,12 +78,12 @@ public class Message {
 			return this;
 		}
 
-		public Builder to(Topic topic) {
-			if (topic instanceof Condition) {
-				this.condition = topic.toString();
+		public Builder to(To to) {
+			if (to instanceof Condition) {
+				this.condition = to.to();
 			}
 			else {
-				this.to = "/topics/" + topic.name();
+				this.to = ((Topic)to).path();
 			}
 
 			return this;

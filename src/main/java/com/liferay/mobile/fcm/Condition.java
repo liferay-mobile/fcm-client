@@ -17,22 +17,22 @@ package com.liferay.mobile.fcm;
 /**
  * @author Bruno Farache
  */
-public class Condition extends Topic {
+public class Condition implements To {
 
-	public Condition(Topic left, Operator operator, Topic right) {
+	public Condition(To left, Operator operator, To right) {
 		this.left = left;
 		this.operator = operator;
 		this.right = right;
 	}
 
 	@Override
-	public String toString() {
-		return left.toString() + operator.value + right.toString();
+	public String to() {
+		return left.to() + " " + operator.value + " " + right.to();
 	}
 
-	protected Topic left;
+	protected To left;
 	protected Operator operator;
-	protected Topic right;
+	protected To right;
 
 
 	protected enum Operator {

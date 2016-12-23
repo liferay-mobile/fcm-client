@@ -14,34 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
-import com.liferay.mobile.fcm.exception.InvalidTopicNameException;
+public interface To {
 
-/**
- * @author Bruno Farache
- */
-public class Topic implements To {
-
-	public Topic(String name) throws InvalidTopicNameException {
-		if (!name.matches("[a-zA-Z0-9-_.~%]+")) {
-			throw new InvalidTopicNameException(name);
-		}
-
-		this.name = name;
-	}
-
-	public String name() {
-		return name;
-	}
-
-	public String path() {
-		return "/topics/" + name;
-	}
-
-	@Override
-	public String to() {
-		return String.format("'%s' in topics", name);
-	}
-
-	protected String name;
+	String to();
 
 }

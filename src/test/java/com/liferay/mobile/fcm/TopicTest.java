@@ -28,39 +28,42 @@ public class TopicTest {
 
 	@Test
 	public void testTwoTopicsWithAnd() throws InvalidTopicNameException {
-		Topic topic = new Condition(
+		To topic = new Condition(
 			new Topic("a"), Operator.AND, new Topic("b"));
 
 		assertEquals(Operator.AND, Operator.valueOf("AND"));
-		assertEquals("'a' in topics && 'b' in topics", topic.toString());
+		assertEquals("'a' in topics && 'b' in topics", topic.to());
 	}
 
 	@Test
 	public void testTwoTopicsWithOr() throws InvalidTopicNameException {
-		Topic topic = new Condition(
+		To topic = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
 		assertEquals(Operator.OR, Operator.valueOf("OR"));
-		assertEquals("'a' in topics || 'b' in topics", topic.toString());
+		assertEquals("'a' in topics || 'b' in topics", topic.to());
 	}
 
 	@Test
 	public void testThreeTopicsWithOr() throws InvalidTopicNameException {
-		Topic left = new Condition(
+		To left = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
 		Topic right = new Topic("c");
-		Topic topic = new Condition(left, Operator.OR, right);
+		To topic = new Condition(left, Operator.OR, right);
 
 		assertEquals(
 			"'a' in topics || 'b' in topics || 'c' in topics",
-			topic.toString());
+			topic.to());
 	}
 
 	@Test
 	public void testMessageWithCondition() throws InvalidTopicNameException {
+		Condition to = new Condition(
+			new Topic("a"), Operator.OR, new Topic("b"));
+
 		Message message = new Message.Builder()
-			.to(new Condition(new Topic("a"), Operator.OR, new Topic("b")))
+			.to(to)
 			.build();
 
 		String json = Sender.toJson(message);
@@ -71,12 +74,16 @@ public class TopicTest {
 
 	@Test
 	public void testMessageWithTopic() throws InvalidTopicNameException {
+		String name = "a";
+		Topic to = new Topic(name);
+		assertEquals(name, to.name());
+
 		Message message = new Message.Builder()
-			.to(new Topic("a"))
+			.to(to)
 			.build();
 
 		String json = Sender.toJson(message);
-		assertEquals(json, "{\"to\":\"/topics/a\"}");
+		assertEquals(json, "{\"to\":\"/topics/" + name + "\"}");
 	}
 
 	@Test(expected = InvalidTopicNameException.class)
