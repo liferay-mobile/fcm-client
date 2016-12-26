@@ -41,18 +41,6 @@ public class IntegrationTest {
 			.data(data)
 			.build();
 
-		String json = Sender.toJson(message);
-
-		assertEquals(
-			"{" +
-				"\"data\":{\"foo\":\"bar\"}," +
-				"\"to\":\"" + config.token+ "\"" +
-			"}",
-			json);
-
-		assertEquals(config.token, message.to());
-		assertEquals(data, message.data());
-
 		sender
 			.send(message)
 			.test()
@@ -74,18 +62,6 @@ public class IntegrationTest {
 			.to(config.token)
 			.notification(notification)
 			.build();
-
-		String json = Sender.toJson(message);
-
-		assertEquals(
-			"{" +
-				"\"notification\":{\"body\":\"bar\",\"title\":\"foo\"}," +
-				"\"to\":\"" + config.token + "\"" +
-			"}",
-			json);
-
-		assertEquals(config.token, message.to());
-		assertEquals(notification, message.notification());
 
 		sender
 			.send(message)
@@ -109,18 +85,6 @@ public class IntegrationTest {
 			.to(new Topic(news))
 			.notification(notification)
 			.build();
-
-		String json = Sender.toJson(message);
-
-		assertEquals(
-			"{" +
-				"\"notification\":{\"title\":\"news\"}," +
-				"\"to\":\"/topics/" + news + "\"" +
-			"}",
-			json);
-
-		assertEquals("/topics/" + news, message.to());
-		assertEquals(notification, message.notification());
 
 		sender
 			.send(message)
@@ -147,23 +111,6 @@ public class IntegrationTest {
 			.to(config.token)
 			.notification(notification)
 			.build();
-
-		String json = Sender.toJson(message);
-
-		assertEquals(
-			"{" +
-				"\"notification\":{" +
-					"\"body_loc_key\":\"localized_body\"," +
-					"\"body_loc_args\":[\"bar\"]," +
-					"\"title_loc_key\":\"localized_title\"," +
-					"\"title_loc_args\":[\"foo\"]" +
-				"}," +
-				"\"to\":\"" + config.token + "\"" +
-			"}",
-			json);
-
-		assertEquals(config.token, message.to());
-		assertEquals(notification, message.notification());
 
 		sender
 			.send(message)

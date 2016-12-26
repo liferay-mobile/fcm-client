@@ -114,4 +114,65 @@ public class NotificationTest {
 		assertEquals(json, "{\"click_action\":\"action\"}");
 	}
 
+	@Test
+	public void testMessageWithNotification() {
+		String token = "token";
+
+		Notification notification = new Notification.Builder()
+			.title("foo")
+			.body("bar")
+			.build();
+
+		Message message = new Message.Builder()
+			.to(token)
+			.notification(notification)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"notification\":{\"body\":\"bar\",\"title\":\"foo\"}," +
+				"\"to\":\"" + token + "\"" +
+			"}",
+			json);
+
+		assertEquals(token, message.to());
+		assertEquals(notification, message.notification());
+	}
+
+	@Test
+	public void testMessageWithLocalizedNotification() {
+		String token = "token";
+
+		Notification notification = new Notification.Builder()
+			.titleLocalizationKey("localized_title")
+			.titleLocalizationArguments("foo")
+			.bodyLocalizationKey("localized_body")
+			.bodyLocalizationArguments("bar")
+			.build();
+
+		Message message = new Message.Builder()
+			.to(token)
+			.notification(notification)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"notification\":{" +
+					"\"body_loc_key\":\"localized_body\"," +
+					"\"body_loc_args\":[\"bar\"]," +
+					"\"title_loc_key\":\"localized_title\"," +
+					"\"title_loc_args\":[\"foo\"]" +
+				"}," +
+				"\"to\":\"" + token + "\"" +
+			"}",
+			json);
+
+		assertEquals(token, message.to());
+		assertEquals(notification, message.notification());
+	}
+
 }

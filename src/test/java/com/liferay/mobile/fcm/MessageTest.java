@@ -18,12 +18,40 @@ import com.liferay.mobile.fcm.Message.Priority;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * @author Bruno Farache
  */
 public class MessageTest {
+
+	@Test
+	public void testMessageWithData() {
+		String token = "token";
+
+		Map<String, String> data = new HashMap<>();
+		data.put("foo", "bar");
+
+		Message message = new Message.Builder()
+			.to(token)
+			.data(data)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"data\":{\"foo\":\"bar\"}," +
+				"\"to\":\"" + token + "\"" +
+			"}",
+			json);
+
+		assertEquals(token, message.to());
+		assertEquals(data, message.data());
+	}
 
 	@Test
 	public void testPriorityHigh() {
