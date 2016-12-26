@@ -67,6 +67,11 @@ public class SenderTest {
 		assertEquals(sender.url(), request.url().toString());
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void testRxNotInClasspath() {
+		RxSender.findRxInClasspath("rx.Observable");
+	}
+
 	private Map createData() {
 		Map<String, String> data = new HashMap<>();
 		data.put("foo", "bar");

@@ -24,19 +24,12 @@ import okhttp3.Response;
 
 public class RxSender {
 
-	public RxSender(String key) throws RuntimeException {
+	public RxSender(String key) {
 		this(new Sender(key));
 	}
 
-	protected RxSender(Sender sender) throws RuntimeException {
-		try {
-			Class.forName("io.reactivex.Single");
-		}
-		catch (ClassNotFoundException e) {
-			throw new RuntimeException(
-				"RxSender needs RxJava 2.0.x added as runtime dependency", e);
-		}
-
+	public RxSender(Sender sender) {
+		findRxInClasspath("io.reactivex.Single");
 		this.sender = sender;
 	}
 
@@ -48,6 +41,17 @@ public class RxSender {
 
 	public Sender sender() {
 		return sender;
+	}
+
+	protected static void findRxInClasspath(String className) {
+		try {
+			Class.forName(className);
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(
+				"RxSender needs RxJava 2.0.x added as runtime dependency",
+				cnfe);
+		}
 	}
 
 	protected final Sender sender;
