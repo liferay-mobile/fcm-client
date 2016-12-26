@@ -17,8 +17,6 @@ package com.liferay.mobile.fcm;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.reactivex.Single;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,10 +34,8 @@ public class Sender {
 		this.key = key;
 	}
 
-	public Single<Response> send(Message message) {
-		return Single.fromCallable(() ->
-			client.newCall(createRequest(message)).execute()
-		);
+	public Response send(Message message) throws Exception {
+		return client.newCall(createRequest(message)).execute();
 	}
 
 	protected Request createRequest(Message message) {
@@ -51,6 +47,10 @@ public class Sender {
 			.header(AUTHORIZATION, "key=" + key)
 			.post(body)
 			.build();
+	}
+
+	public String key() {
+		return key;
 	}
 
 	protected static String toJson(Object object) {

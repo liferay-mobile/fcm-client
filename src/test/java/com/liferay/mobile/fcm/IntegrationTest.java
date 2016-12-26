@@ -29,8 +29,10 @@ import static org.junit.Assert.assertEquals;
 public class IntegrationTest {
 
 	@Test
-	public void testSendMessage() {
-		Sender sender = new Sender(config.key);
+	public void testSendMessage() throws Exception {
+		RxSender sender = new RxSender(config.key);
+		assertEquals(config.key, sender.sender().key());
+
 		Map<String, String> data = new HashMap<>();
 		data.put("foo", "bar");
 
@@ -60,8 +62,8 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testSendNotification() {
-		Sender sender = new Sender(config.key);
+	public void testSendNotification() throws Exception {
+		RxSender sender = new RxSender(config.key);
 
 		Notification notification = new Notification.Builder()
 			.title("foo")
@@ -95,7 +97,7 @@ public class IntegrationTest {
 
 	@Test
 	public void testSendNotificationToTopic() throws Exception {
-		Sender sender = new Sender(config.key);
+		RxSender sender = new RxSender(config.key);
 
 		String news = "news";
 
@@ -129,8 +131,10 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testSendNotificationWithLocalizedTitleAndBody() {
-		Sender sender = new Sender(config.key);
+	public void testSendNotificationWithLocalizedTitleAndBody()
+		throws Exception {
+
+		RxSender sender = new RxSender(config.key);
 
 		Notification notification = new Notification.Builder()
 			.titleLocalizationKey("localized_title")
