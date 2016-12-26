@@ -24,16 +24,20 @@ import okhttp3.Response;
 
 public class RxSender {
 
-	public RxSender(String key) throws Exception {
+	public RxSender(String key) throws RuntimeException {
+		this(new Sender(key));
+	}
+
+	protected RxSender(Sender sender) throws RuntimeException {
 		try {
 			Class.forName("io.reactivex.Single");
 		}
 		catch (ClassNotFoundException e) {
-			throw new Exception(
-				"RxSender needs RxJava 2.0.x added as runtime dependency");
+			throw new RuntimeException(
+				"RxSender needs RxJava 2.0.x added as runtime dependency", e);
 		}
 
-		sender = new Sender(key);
+		this.sender = sender;
 	}
 
 	public Single<Response> send(Message message) {

@@ -29,9 +29,18 @@ import okhttp3.Response;
 
 public class Sender {
 
+	public static final String AUTHORIZATION = "Authorization";
+
+	public static final String URL = "https://fcm.googleapis.com/fcm/send";
+
 	public Sender(String key) {
+		this(key, URL);
+	}
+
+	protected Sender(String key, String url) {
 		this.client = new OkHttpClient();
 		this.key = key;
+		this.url = url;
 	}
 
 	public Response send(Message message) throws Exception {
@@ -43,7 +52,7 @@ public class Sender {
 			contentType, toJson(message));
 
 		return new Request.Builder()
-			.url(URL)
+			.url(url)
 			.header(AUTHORIZATION, "key=" + key)
 			.post(body)
 			.build();
@@ -51,6 +60,10 @@ public class Sender {
 
 	public String key() {
 		return key;
+	}
+
+	public String url() {
+		return url;
 	}
 
 	protected static String toJson(Object object) {
@@ -67,10 +80,6 @@ public class Sender {
 		return gson;
 	}
 
-	protected static final String AUTHORIZATION = "Authorization";
-
-	protected static final String URL = "https://fcm.googleapis.com/fcm/send";
-
 	protected final OkHttpClient client;
 
 	protected final MediaType contentType = MediaType.parse("application/json");
@@ -78,5 +87,7 @@ public class Sender {
 	protected static Gson gson;
 
 	protected final String key;
+
+	protected final String url;
 
 }

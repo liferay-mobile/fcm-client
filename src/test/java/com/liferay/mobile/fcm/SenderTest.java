@@ -35,6 +35,8 @@ public class SenderTest {
 	@Test
 	public void testRequestBody() throws IOException {
 		Sender sender = new Sender(config.key);
+		assertEquals(config.key, sender.key());
+
 		Message message = createMessage(createData());
 		Request request = sender.createRequest(message);
 
@@ -45,7 +47,6 @@ public class SenderTest {
 		String content = buffer.readUtf8();
 
 		String json = Sender.toJson(message);
-
 		assertEquals(json, content);
 	}
 
@@ -63,7 +64,7 @@ public class SenderTest {
 	public void testRequestURL() {
 		Sender sender = new Sender(config.key);
 		Request request = sender.createRequest(createMessage(createData()));
-		assertEquals(Sender.URL, request.url().toString());
+		assertEquals(sender.url(), request.url().toString());
 	}
 
 	private Map createData() {
