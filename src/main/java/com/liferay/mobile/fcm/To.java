@@ -16,6 +16,6 @@ package com.liferay.mobile.fcm;
 
 public interface To {
 
-	String to();
+	String condition();
 
 }

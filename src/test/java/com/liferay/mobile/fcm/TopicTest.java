@@ -34,13 +34,13 @@ public class TopicTest {
 		condition.parentheses();
 
 		String expected = "('a' in topics && 'b' in topics)";
-		assertEquals(expected, condition.to());
+		assertEquals(expected, condition.condition());
 
 		condition = new Condition(a).and(b).parentheses();
-		assertEquals(expected, condition.to());
+		assertEquals(expected, condition.condition());
 
 		condition = new Condition(condition).or(new Topic("c"));
-		assertEquals(expected + " || 'c' in topics", condition.to());
+		assertEquals(expected + " || 'c' in topics", condition.condition());
 	}
 
 	@Test
@@ -51,10 +51,10 @@ public class TopicTest {
 		assertEquals(Operator.AND, Operator.valueOf("AND"));
 
 		String expected = "'a' in topics && 'b' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).and(b);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
@@ -65,10 +65,10 @@ public class TopicTest {
 		assertEquals(Operator.OR, Operator.valueOf("OR"));
 
 		String expected = "'a' in topics || 'b' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).or(b);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
@@ -81,13 +81,13 @@ public class TopicTest {
 		To topic = new Condition(left, Operator.AND, c);
 
 		String expected = "'a' in topics && 'b' in topics && 'c' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(left).and(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).and(b).and(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
@@ -100,13 +100,13 @@ public class TopicTest {
 		To topic = new Condition(left, Operator.OR, c);
 
 		String expected = "'a' in topics && 'b' in topics || 'c' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(left).or(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).and(b).or(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
@@ -119,13 +119,13 @@ public class TopicTest {
 		To topic = new Condition(left, Operator.OR, c);
 
 		String expected = "'a' in topics || 'b' in topics || 'c' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(left).or(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).or(b).or(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
@@ -138,42 +138,44 @@ public class TopicTest {
 		To topic = new Condition(left, Operator.AND, c);
 
 		String expected = "'a' in topics || 'b' in topics && 'c' in topics";
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(left).and(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 
 		topic = new Condition(a).or(b).and(c);
-		assertEquals(expected, topic.to());
+		assertEquals(expected, topic.condition());
 	}
 
 	@Test
 	public void testMessageWithCondition() throws Exception {
-		Condition to = new Condition(
+		Condition condition = new Condition(
 			new Topic("a"), Operator.OR, new Topic("b"));
 
 		Message message = new Message.Builder()
-			.to(to)
+			.condition(condition)
 			.build();
 
 		String json = Sender.toJson(message);
-		String condition = "'a' in topics || 'b' in topics";
-		assertEquals(condition, message.condition());
-		assertEquals(json, "{\"condition\":\"" + condition + "\"}");
+		String expected = "'a' in topics || 'b' in topics";
+		assertEquals(expected, message.condition());
+		assertEquals(json, "{\"condition\":\"" + expected + "\"}");
 	}
 
 	@Test
 	public void testMessageWithTopic() throws Exception {
 		String name = "a";
-		Topic to = new Topic(name);
-		assertEquals(name, to.name());
+		Topic topic = new Topic(name);
+		assertEquals(name, topic.name());
 
 		Message message = new Message.Builder()
-			.to(to)
+			.to(topic)
 			.build();
 
 		String json = Sender.toJson(message);
-		assertEquals(json, "{\"to\":\"/topics/" + name + "\"}");
+		String expected = "/topics/" + name;
+		assertEquals(expected, message.to());
+		assertEquals(json, "{\"to\":\"" + expected + "\"}");
 	}
 
 	@Test(expected = InvalidTopicName.class)

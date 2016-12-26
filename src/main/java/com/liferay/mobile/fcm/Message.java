@@ -73,18 +73,21 @@ public class Message {
 			return this;
 		}
 
+		public Builder to(Topic topic) {
+			return to(topic.path());
+		}
+
 		public Builder to(String to) {
 			this.to = to;
 			return this;
 		}
 
-		public Builder to(Condition to) {
-			this.condition = to.to();
-			return this;
+		public Builder condition(Condition condition) {
+			return condition(condition.condition());
 		}
 
-		public Builder to(Topic to) {
-			this.to = to.path();
+		public Builder condition(String condition) {
+			this.condition = condition;
 			return this;
 		}
 

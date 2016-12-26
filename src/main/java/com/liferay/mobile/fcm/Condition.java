@@ -45,6 +45,27 @@ public class Condition implements To {
 		return this;
 	}
 
+	@Override
+	public String condition() {
+		StringBuilder sb = new StringBuilder();
+
+		if (parentheses) {
+			sb.append("(");
+		}
+
+		sb.append(left.condition());
+		sb.append(" ");
+		sb.append(operator.value);
+		sb.append(" ");
+		sb.append(right.condition());
+
+		if (parentheses) {
+			sb.append(")");
+		}
+
+		return sb.toString();
+	}
+
 	public Condition or(To to) throws ExceededNumberOfOperators {
 		if (operator != null) {
 			left = new Condition(left, operator, right);
@@ -59,27 +80,6 @@ public class Condition implements To {
 	public Condition parentheses() {
 		parentheses = true;
 		return this;
-	}
-
-	@Override
-	public String to() {
-		StringBuilder sb = new StringBuilder();
-
-		if (parentheses) {
-			sb.append("(");
-		}
-
-		sb.append(left.to());
-		sb.append(" ");
-		sb.append(operator.value);
-		sb.append(" ");
-		sb.append(right.to());
-
-		if (parentheses) {
-			sb.append(")");
-		}
-
-		return sb.toString();
 	}
 
 	protected int countNumberOfTopics(To to)

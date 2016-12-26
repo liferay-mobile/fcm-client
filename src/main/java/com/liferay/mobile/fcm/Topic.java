@@ -29,17 +29,17 @@ public class Topic implements To {
 		this.name = name;
 	}
 
+	@Override
+	public String condition() {
+		return "'" + name + "' in topics";
+	}
+
 	public String name() {
 		return name;
 	}
 
 	public String path() {
 		return "/topics/" + name;
-	}
-
-	@Override
-	public String to() {
-		return String.format("'%s' in topics", name);
 	}
 
 	protected String name;

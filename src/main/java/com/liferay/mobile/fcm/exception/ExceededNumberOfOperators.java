@@ -22,7 +22,9 @@ import com.liferay.mobile.fcm.Condition;
 public class ExceededNumberOfOperators extends Exception {
 
 	public ExceededNumberOfOperators(Condition condition) {
-		super("Up to 2 operators per condition are allowed: " + condition.to());
+		super(
+			"Up to 2 operators per condition are allowed: " +
+				condition.condition());
 	}
 
 }
