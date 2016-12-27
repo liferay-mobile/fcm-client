@@ -31,6 +31,25 @@ import static org.junit.Assert.assertEquals;
 public class MessageTest {
 
 	@Test
+	public void testMessageWithCollapseKey() {
+		String collapseKey = "key";
+
+		Message message = new Message.Builder()
+			.collapseKey(collapseKey)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"collapse_key\":\"" + collapseKey + "\"" +
+			"}",
+			json);
+
+		assertEquals(collapseKey, message.collapseKey());
+	}
+
+	@Test
 	public void testMessageWithData() {
 		String token = "token";
 

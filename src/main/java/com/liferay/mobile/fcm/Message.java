@@ -23,6 +23,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Message {
 
+	public String collapseKey() {
+		return collapseKey;
+	}
+
 	public String condition() {
 		return condition;
 	}
@@ -64,8 +68,33 @@ public class Message {
 
 	public static class Builder {
 
+		public Builder collapseKey(String collapseKey) {
+			this.collapseKey = collapseKey;
+			return this;
+		}
+
+		public Builder condition(Condition condition) {
+			return condition(condition.condition());
+		}
+
+		public Builder condition(String condition) {
+			this.condition = condition;
+			return this;
+		}
+
 		public Builder data(Object data) {
 			this.data = data;
+			return this;
+		}
+
+		public Builder multicast(String... tokens)
+			throws ExceededNumberOfMulticastTokens {
+
+			if (tokens.length > 1000) {
+				throw new ExceededNumberOfMulticastTokens(tokens);
+			}
+
+			this.multicast = tokens;
 			return this;
 		}
 
@@ -88,30 +117,11 @@ public class Message {
 			return this;
 		}
 
-		public Builder multicast(String... tokens)
-			throws ExceededNumberOfMulticastTokens {
-
-			if (tokens.length > 1000) {
-				throw new ExceededNumberOfMulticastTokens(tokens);
-			}
-
-			this.multicast = tokens;
-			return this;
-		}
-
-		public Builder condition(Condition condition) {
-			return condition(condition.condition());
-		}
-
-		public Builder condition(String condition) {
-			this.condition = condition;
-			return this;
-		}
-
 		public Message build() {
 			return new Message(this);
 		}
 
+		protected String collapseKey;
 		protected String condition;
 		protected Object data;
 		protected String[] multicast;
@@ -122,6 +132,7 @@ public class Message {
 	}
 
 	protected Message(Builder builder) {
+		this.collapseKey = builder.collapseKey;
 		this.condition = builder.condition;
 		this.data = builder.data;
 		this.multicast = builder.multicast;
@@ -130,6 +141,8 @@ public class Message {
 		this.to = builder.to;
 	}
 
+	@SerializedName("collapse_key")
+	protected final String collapseKey;
 	protected final String condition;
 	protected final Object data;
 	@SerializedName("registration_ids")
