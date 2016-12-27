@@ -46,6 +46,14 @@ public class Message {
 		return data;
 	}
 
+	public boolean dryRun() {
+		if (dryRun == null) {
+			return false;
+		}
+
+		return dryRun;
+	}
+
 	public String[] multicast() {
 		return multicast;
 	}
@@ -115,6 +123,11 @@ public class Message {
 			return this;
 		}
 
+		public Builder dryRun(boolean dryRun) {
+			this.dryRun = dryRun;
+			return this;
+		}
+
 		public Builder multicast(String... tokens)
 			throws ExceededNumberOfMulticastTokens {
 
@@ -172,6 +185,7 @@ public class Message {
 		protected String condition;
 		protected Boolean contentAvailable;
 		protected Object data;
+		protected Boolean dryRun;
 		protected String[] multicast;
 		protected Notification notification;
 		protected Priority priority;
@@ -186,6 +200,7 @@ public class Message {
 		this.condition = builder.condition;
 		this.contentAvailable = builder.contentAvailable;
 		this.data = builder.data;
+		this.dryRun = builder.dryRun;
 		this.multicast = builder.multicast;
 		this.notification = builder.notification;
 		this.priority = builder.priority;
@@ -200,6 +215,8 @@ public class Message {
 	@SerializedName("content_available")
 	protected final Boolean contentAvailable;
 	protected final Object data;
+	@SerializedName("dry_run")
+	protected final Boolean dryRun;
 	@SerializedName("registration_ids")
 	protected final String[] multicast;
 	protected final Notification notification;

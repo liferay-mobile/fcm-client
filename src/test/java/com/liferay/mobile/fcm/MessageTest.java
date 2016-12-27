@@ -72,9 +72,7 @@ public class MessageTest {
 
 	@Test
 	public void testMessageWithoutContentAvailable() {
-		Message message = new Message.Builder()
-			.build();
-
+		Message message = new Message.Builder().build();
 		assertFalse(message.contentAvailable());
 	}
 
@@ -101,6 +99,29 @@ public class MessageTest {
 
 		assertEquals(token, message.to());
 		assertEquals(data, message.data());
+	}
+
+	@Test
+	public void testMessageWithDryRun() {
+		Message message = new Message.Builder()
+			.dryRun(true)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"dry_run\":true" +
+			"}",
+			json);
+
+		assertTrue(message.dryRun());
+	}
+
+	@Test
+	public void testMessageWithoutDryRun() {
+		Message message = new Message.Builder().build();
+		assertFalse(message.dryRun());
 	}
 
 	@Test
