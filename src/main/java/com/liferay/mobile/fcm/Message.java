@@ -31,6 +31,14 @@ public class Message {
 		return condition;
 	}
 
+	public boolean contentAvailable() {
+		if (contentAvailable == null) {
+			return false;
+		}
+
+		return contentAvailable;
+	}
+
 	public Object data() {
 		return data;
 	}
@@ -82,6 +90,11 @@ public class Message {
 			return this;
 		}
 
+		public Builder contentAvailable(boolean contentAvailable) {
+			this.contentAvailable = contentAvailable;
+			return this;
+		}
+
 		public Builder data(Object data) {
 			this.data = data;
 			return this;
@@ -123,6 +136,7 @@ public class Message {
 
 		protected String collapseKey;
 		protected String condition;
+		protected Boolean contentAvailable;
 		protected Object data;
 		protected String[] multicast;
 		protected Notification notification;
@@ -134,6 +148,7 @@ public class Message {
 	protected Message(Builder builder) {
 		this.collapseKey = builder.collapseKey;
 		this.condition = builder.condition;
+		this.contentAvailable = builder.contentAvailable;
 		this.data = builder.data;
 		this.multicast = builder.multicast;
 		this.notification = builder.notification;
@@ -144,6 +159,8 @@ public class Message {
 	@SerializedName("collapse_key")
 	protected final String collapseKey;
 	protected final String condition;
+	@SerializedName("content_available")
+	protected final Boolean contentAvailable;
 	protected final Object data;
 	@SerializedName("registration_ids")
 	protected final String[] multicast;

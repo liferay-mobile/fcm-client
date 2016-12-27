@@ -24,6 +24,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Bruno Farache
@@ -47,6 +49,31 @@ public class MessageTest {
 			json);
 
 		assertEquals(collapseKey, message.collapseKey());
+	}
+
+	@Test
+	public void testMessageWithContentAvailable() {
+		Message message = new Message.Builder()
+			.contentAvailable(true)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"content_available\":true" +
+			"}",
+			json);
+
+		assertTrue(message.contentAvailable());
+	}
+
+	@Test
+	public void testMessageWithoutContentAvailable() {
+		Message message = new Message.Builder()
+			.build();
+
+		assertFalse(message.contentAvailable());
 	}
 
 	@Test
