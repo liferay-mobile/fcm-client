@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -27,6 +29,10 @@ public class Message {
 
 	public Object data() {
 		return data;
+	}
+
+	public String[] multicast() {
+		return multicast;
 	}
 
 	public Notification notification() {
@@ -77,8 +83,19 @@ public class Message {
 			return to(topic.path());
 		}
 
-		public Builder to(String to) {
-			this.to = to;
+		public Builder to(String token) {
+			this.to = token;
+			return this;
+		}
+
+		public Builder multicast(String... tokens)
+			throws ExceededNumberOfMulticastTokens {
+
+			if (tokens.length > 1000) {
+				throw new ExceededNumberOfMulticastTokens(tokens);
+			}
+
+			this.multicast = tokens;
 			return this;
 		}
 
@@ -97,6 +114,7 @@ public class Message {
 
 		protected String condition;
 		protected Object data;
+		protected String[] multicast;
 		protected Notification notification;
 		protected Priority priority;
 		protected String to;
@@ -106,6 +124,7 @@ public class Message {
 	protected Message(Builder builder) {
 		this.condition = builder.condition;
 		this.data = builder.data;
+		this.multicast = builder.multicast;
 		this.notification = builder.notification;
 		this.priority = builder.priority;
 		this.to = builder.to;
@@ -113,6 +132,8 @@ public class Message {
 
 	protected final String condition;
 	protected final Object data;
+	@SerializedName("registration_ids")
+	protected final String[] multicast;
 	protected final Notification notification;
 	protected final Priority priority;
 	protected final String to;

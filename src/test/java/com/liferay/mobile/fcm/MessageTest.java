@@ -15,12 +15,14 @@
 package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Message.Priority;
+import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
 
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -51,6 +53,34 @@ public class MessageTest {
 
 		assertEquals(token, message.to());
 		assertEquals(data, message.data());
+	}
+
+	@Test
+	public void testMulticastMessage() throws ExceededNumberOfMulticastTokens {
+		String[] tokens = new String[] {"1", "2"};
+
+		Message message = new Message.Builder()
+			.multicast(tokens)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"registration_ids\":[\"1\",\"2\"]" +
+			"}",
+			json);
+
+		assertArrayEquals(tokens, message.multicast());
+	}
+
+	@Test(expected = ExceededNumberOfMulticastTokens.class)
+	public void testMulticastMessageWithExceededNumberOfTokens()
+		throws ExceededNumberOfMulticastTokens {
+
+		new Message.Builder()
+			.multicast(new String[1001])
+			.build();
 	}
 
 	@Test
