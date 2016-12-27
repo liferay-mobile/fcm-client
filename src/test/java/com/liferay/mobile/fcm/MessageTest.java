@@ -16,11 +16,13 @@ package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Message.Priority;
 import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
+import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
 
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -99,6 +101,38 @@ public class MessageTest {
 
 		assertEquals(token, message.to());
 		assertEquals(data, message.data());
+	}
+
+	@Test
+	public void testMessageWithTimeToLive() throws ExceededTimeToLive {
+		Message message = new Message.Builder()
+			.timeToLive(1, TimeUnit.SECONDS)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"time_to_live\":1" +
+			"}",
+			json);
+
+		assertEquals(1, message.timeToLive());
+	}
+
+	@Test(expected = ExceededTimeToLive.class)
+	public void testMulticastMessageWithExceededTimeToLive()
+		throws ExceededTimeToLive {
+
+		new Message.Builder()
+			.timeToLive(2419201, TimeUnit.SECONDS)
+			.build();
+	}
+
+	@Test
+	public void testMessageWithoutTimeToLive() {
+		Message message = new Message.Builder().build();
+		assertEquals(0, message.timeToLive());
 	}
 
 	@Test

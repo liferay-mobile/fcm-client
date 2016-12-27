@@ -15,6 +15,9 @@
 package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
+import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
+
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -57,6 +60,14 @@ public class Message {
 
 	public String to() {
 		return to;
+	}
+
+	public int timeToLive() {
+		if (timeToLive == null) {
+			return 0;
+		}
+
+		return timeToLive;
 	}
 
 	public enum Priority {
@@ -130,6 +141,20 @@ public class Message {
 			return this;
 		}
 
+		public Builder timeToLive(int timeToLive, TimeUnit unit)
+			throws ExceededTimeToLive {
+
+			long duration = unit.toSeconds(timeToLive);
+			long max = TimeUnit.DAYS.toSeconds(28);
+
+			if (duration > max) {
+				throw new ExceededTimeToLive(duration);
+			}
+
+			this.timeToLive = (int)duration;
+			return this;
+		}
+
 		public Message build() {
 			return new Message(this);
 		}
@@ -141,6 +166,7 @@ public class Message {
 		protected String[] multicast;
 		protected Notification notification;
 		protected Priority priority;
+		protected Integer timeToLive;
 		protected String to;
 
 	}
@@ -154,6 +180,7 @@ public class Message {
 		this.notification = builder.notification;
 		this.priority = builder.priority;
 		this.to = builder.to;
+		this.timeToLive = builder.timeToLive;
 	}
 
 	@SerializedName("collapse_key")
@@ -166,6 +193,8 @@ public class Message {
 	protected final String[] multicast;
 	protected final Notification notification;
 	protected final Priority priority;
+	@SerializedName("time_to_live")
+	protected final Integer timeToLive;
 	protected final String to;
 
 }
