@@ -104,6 +104,25 @@ public class MessageTest {
 	}
 
 	@Test
+	public void testMessageWithRestrictedPackageName() {
+		String packageName = "packageName";
+
+		Message message = new Message.Builder()
+			.restrictedPackageName(packageName)
+			.build();
+
+		String json = Sender.toJson(message);
+
+		assertEquals(
+			"{" +
+				"\"restricted_package_name\":\"" + packageName + "\"" +
+			"}",
+			json);
+
+		assertEquals(packageName, message.restrictedPackageName());
+	}
+
+	@Test
 	public void testMessageWithTimeToLive() throws ExceededTimeToLive {
 		Message message = new Message.Builder()
 			.timeToLive(1, TimeUnit.SECONDS)

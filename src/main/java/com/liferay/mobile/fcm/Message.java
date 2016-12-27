@@ -58,6 +58,10 @@ public class Message {
 		return priority;
 	}
 
+	public String restrictedPackageName() {
+		return restrictedPackageName;
+	}
+
 	public String to() {
 		return to;
 	}
@@ -132,6 +136,11 @@ public class Message {
 			return this;
 		}
 
+		public Builder restrictedPackageName(String restrictedPackageName) {
+			this.restrictedPackageName = restrictedPackageName;
+			return this;
+		}
+
 		public Builder to(Topic topic) {
 			return to(topic.path());
 		}
@@ -166,6 +175,7 @@ public class Message {
 		protected String[] multicast;
 		protected Notification notification;
 		protected Priority priority;
+		protected String restrictedPackageName;
 		protected Integer timeToLive;
 		protected String to;
 
@@ -179,6 +189,7 @@ public class Message {
 		this.multicast = builder.multicast;
 		this.notification = builder.notification;
 		this.priority = builder.priority;
+		this.restrictedPackageName = builder.restrictedPackageName;
 		this.to = builder.to;
 		this.timeToLive = builder.timeToLive;
 	}
@@ -193,6 +204,8 @@ public class Message {
 	protected final String[] multicast;
 	protected final Notification notification;
 	protected final Priority priority;
+	@SerializedName("restricted_package_name")
+	protected final String restrictedPackageName;
 	@SerializedName("time_to_live")
 	protected final Integer timeToLive;
 	protected final String to;
