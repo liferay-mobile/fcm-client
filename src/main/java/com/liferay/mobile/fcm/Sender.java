@@ -17,11 +17,12 @@ package com.liferay.mobile.fcm;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.Reader;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * @author Bruno Farache
@@ -44,7 +45,13 @@ public class Sender {
 	}
 
 	public Response send(Message message) throws Exception {
-		return client.newCall(createRequest(message)).execute();
+		Request request = createRequest(message);
+		okhttp3.Response httpResponse = client.newCall(request).execute();
+
+		Response response = fromJson(
+			httpResponse.body().charStream(), Response.class);
+
+		return response.httpResponse(httpResponse);
 	}
 
 	protected Request createRequest(Message message) {
@@ -64,6 +71,10 @@ public class Sender {
 
 	public String url() {
 		return url;
+	}
+
+	protected static <T> T fromJson(Reader reader, Class<T> clazz) {
+		return gson().fromJson(reader, clazz);
 	}
 
 	protected static String toJson(Object object) {

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
@@ -51,7 +50,7 @@ public class IntegrationTest {
 			.send(message)
 			.test()
 			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.code()))
+			.assertValue(response -> (200 == response.statusCode()))
 			.assertNoErrors();
 	}
 
@@ -71,7 +70,7 @@ public class IntegrationTest {
 			.send(message)
 			.test()
 			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.code()))
+			.assertValue(response -> (200 == response.statusCode()))
 			.assertNoErrors();
 	}
 
@@ -92,7 +91,7 @@ public class IntegrationTest {
 			.send(message)
 			.test()
 			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.code()))
+			.assertValue(response -> (200 == response.statusCode()))
 			.assertNoErrors();
 	}
 
@@ -114,7 +113,7 @@ public class IntegrationTest {
 			.send(message)
 			.test()
 			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.code()))
+			.assertValue(response -> (200 == response.statusCode()))
 			.assertNoErrors();
 	}
 

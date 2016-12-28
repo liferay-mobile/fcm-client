@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -14,44 +14,29 @@
 
 package com.liferay.mobile.fcm;
 
-import io.reactivex.Single;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Bruno Farache
  */
+public class Result {
 
-public class RxSender {
-
-	public RxSender(String key) {
-		this(new Sender(key));
+	public String error() {
+		return error;
 	}
 
-	public RxSender(Sender sender) {
-		findRxInClasspath("io.reactivex.Single");
-		this.sender = sender;
+	public String messageId() {
+		return messageId;
 	}
 
-	public Single<Response> send(Message message) {
-		return Single.fromCallable(() ->
-			sender.send(message)
-		);
+	public String newToken() {
+		return newToken;
 	}
 
-	public Sender sender() {
-		return sender;
-	}
-
-	protected static void findRxInClasspath(String className) {
-		try {
-			Class.forName(className);
-		}
-		catch (ClassNotFoundException cnfe) {
-			throw new RuntimeException(
-				"RxSender needs RxJava 2.0.x added as runtime dependency",
-				cnfe);
-		}
-	}
-
-	protected final Sender sender;
+	protected String error;
+	@SerializedName("message_id")
+	protected String messageId;
+	@SerializedName("registration_id")
+	protected String newToken;
 
 }
