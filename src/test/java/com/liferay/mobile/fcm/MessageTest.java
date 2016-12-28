@@ -17,6 +17,7 @@ package com.liferay.mobile.fcm;
 import com.liferay.mobile.fcm.Message.Priority;
 import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
 import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
+import com.liferay.mobile.fcm.json.Json;
 
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class MessageTest {
 			.collapseKey(collapseKey)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -59,7 +60,7 @@ public class MessageTest {
 			.contentAvailable(true)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -88,7 +89,7 @@ public class MessageTest {
 			.data(data)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -107,7 +108,7 @@ public class MessageTest {
 			.dryRun(true)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -132,8 +133,7 @@ public class MessageTest {
 			.restrictedPackageName(packageName)
 			.build();
 
-		String json = Sender.toJson(message);
-
+		String json = Json.toJson(message);
 		assertEquals(
 			"{" +
 				"\"restricted_package_name\":\"" + packageName + "\"" +
@@ -149,7 +149,7 @@ public class MessageTest {
 			.timeToLive(1, TimeUnit.SECONDS)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -183,7 +183,7 @@ public class MessageTest {
 			.multicast(tokens)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -209,7 +209,7 @@ public class MessageTest {
 			.priority(Priority.HIGH)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(Priority.HIGH, Priority.valueOf("HIGH"));
 		assertEquals(Priority.HIGH.ordinal(), 1);
@@ -224,7 +224,7 @@ public class MessageTest {
 			.priority(Priority.NORMAL)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(Priority.NORMAL, Priority.valueOf("NORMAL"));
 		assertEquals(Priority.NORMAL.ordinal(), 0);

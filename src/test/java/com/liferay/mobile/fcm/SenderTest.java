@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.json.Json;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class SenderTest {
 		body.writeTo(buffer);
 		String content = buffer.readUtf8();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 		assertEquals(json, content);
 	}
 

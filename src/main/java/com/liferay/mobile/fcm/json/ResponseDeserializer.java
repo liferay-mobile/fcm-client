@@ -32,6 +32,10 @@ import java.lang.reflect.Type;
  */
 public class ResponseDeserializer implements JsonDeserializer<Response> {
 
+	public static final String ERROR = "error";
+
+	public static final String MESSAGE_ID = "message_id";
+
 	@Override
 	public Response deserialize(
 			JsonElement json, Type type, JsonDeserializationContext context)
@@ -48,9 +52,9 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 		JsonObject root = json.getAsJsonObject();
 		Response.Builder builder = new Response.Builder();
 
-		if (root.has("error")) {
+		if (root.has(ERROR)) {
 			Result result = new Result.Builder()
-				.error(root.get("error").getAsString())
+				.error(root.get(ERROR).getAsString())
 				.build();
 
 			builder
@@ -59,7 +63,7 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 		}
 		else {
 			Result result = new Result.Builder()
-				.messageId(root.get("message_id").getAsString())
+				.messageId(root.get(MESSAGE_ID).getAsString())
 				.build();
 
 			builder
@@ -72,15 +76,12 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 
 	protected boolean isTopicResponse(JsonElement json) {
 		JsonObject root = json.getAsJsonObject();
-
-		return (root.has("message_id") || root.has("error")) ;
+		return (root.has(MESSAGE_ID) || root.has(ERROR)) ;
 	}
 
 	protected static Gson gson() {
 		if (gson == null) {
-			gson = new GsonBuilder()
-				.disableHtmlEscaping()
-				.create();
+			gson = Json.createDefaultGsonBuilder().create();
 		}
 
 		return gson;

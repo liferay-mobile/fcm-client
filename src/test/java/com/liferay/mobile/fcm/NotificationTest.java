@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.json.Json;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -31,8 +33,7 @@ public class NotificationTest {
 			.body("body")
 			.build();
 
-		String json = Sender.toJson(notification);
-
+		String json = Json.toJson(notification);
 		assertEquals(json, "{\"body\":\"body\",\"title\":\"title\"}");
 	}
 
@@ -84,7 +85,7 @@ public class NotificationTest {
 			titleLocalizationArguments,
 			notification.titleLocalizationArguments());
 
-		String json = Sender.toJson(notification);
+		String json = Json.toJson(notification);
 
 		assertEquals(json,
 		"{" +
@@ -109,8 +110,7 @@ public class NotificationTest {
 			.clickAction("action")
 			.build();
 
-		String json = Sender.toJson(notification);
-
+		String json = Json.toJson(notification);
 		assertEquals(json, "{\"click_action\":\"action\"}");
 	}
 
@@ -128,7 +128,7 @@ public class NotificationTest {
 			.notification(notification)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +
@@ -157,7 +157,7 @@ public class NotificationTest {
 			.notification(notification)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 
 		assertEquals(
 			"{" +

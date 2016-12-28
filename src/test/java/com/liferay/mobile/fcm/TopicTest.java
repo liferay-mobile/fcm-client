@@ -16,6 +16,7 @@ package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Condition.Operator;
 import com.liferay.mobile.fcm.exception.InvalidTopicName;
+import com.liferay.mobile.fcm.json.Json;
 
 import org.junit.Test;
 
@@ -156,7 +157,7 @@ public class TopicTest {
 			.condition(condition)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 		String expected = "'a' in topics || 'b' in topics";
 		assertEquals(expected, message.condition());
 		assertEquals(json, "{\"condition\":\"" + expected + "\"}");
@@ -172,7 +173,7 @@ public class TopicTest {
 			.to(topic)
 			.build();
 
-		String json = Sender.toJson(message);
+		String json = Json.toJson(message);
 		String expected = "/topics/" + name;
 		assertEquals(expected, message.to());
 		assertEquals(json, "{\"to\":\"" + expected + "\"}");

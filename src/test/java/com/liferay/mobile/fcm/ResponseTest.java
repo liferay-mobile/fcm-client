@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.json.Json;
+
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -39,7 +41,7 @@ public class ResponseTest {
 			"]" +
 		"}";
 
-		Response response = Sender.fromJson(
+		Response response = Json.fromJson(
 			new StringReader(json), Response.class);
 
 		assertEquals(108, response.multicastId());
@@ -69,7 +71,7 @@ public class ResponseTest {
 			"]" +
 		"}";
 
-		Response response = Sender.fromJson(
+		Response response = Json.fromJson(
 			new StringReader(json), Response.class);
 
 		assertEquals(216, response.multicastId());
@@ -95,7 +97,7 @@ public class ResponseTest {
 			"\"error\": \"TopicsMessageRateExceeded\"" +
 		"}";
 
-		Response response = Sender.fromJson(
+		Response response = Json.fromJson(
 			new StringReader(json), Response.class);
 
 		assertEquals(0, response.multicastId());
@@ -119,7 +121,7 @@ public class ResponseTest {
 			"\"message_id\": \"1\"" +
 		"}";
 
-		Response response = Sender.fromJson(
+		Response response = Json.fromJson(
 			new StringReader(json), Response.class);
 
 		assertEquals(0, response.multicastId());

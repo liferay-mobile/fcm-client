@@ -14,11 +14,7 @@
 
 package com.liferay.mobile.fcm;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.liferay.mobile.fcm.json.ResponseDeserializer;
-
-import java.io.Reader;
+import com.liferay.mobile.fcm.json.Json;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -49,7 +45,7 @@ public class Sender {
 		Request request = createRequest(message);
 		okhttp3.Response httpResponse = client.newCall(request).execute();
 
-		Response response = fromJson(
+		Response response = Json.fromJson(
 			httpResponse.body().charStream(), Response.class);
 
 		return response.httpResponse(httpResponse);
@@ -57,7 +53,7 @@ public class Sender {
 
 	protected Request createRequest(Message message) {
 		RequestBody body = RequestBody.create(
-			contentType, toJson(message));
+			contentType, Json.toJson(message));
 
 		return new Request.Builder()
 			.url(url)
@@ -74,31 +70,9 @@ public class Sender {
 		return url;
 	}
 
-	protected static <T> T fromJson(Reader reader, Class<T> clazz) {
-		return gson().fromJson(reader, clazz);
-	}
-
-	protected static String toJson(Object object) {
-		return gson().toJson(object);
-	}
-
-	protected static Gson gson() {
-		if (gson == null) {
-			gson = new GsonBuilder()
-				.registerTypeAdapter(
-					Response.class, new ResponseDeserializer())
-				.disableHtmlEscaping()
-				.create();
-		}
-
-		return gson;
-	}
-
 	protected final OkHttpClient client;
 
 	protected final MediaType contentType = MediaType.parse("application/json");
-
-	protected static Gson gson;
 
 	protected final String key;
 
