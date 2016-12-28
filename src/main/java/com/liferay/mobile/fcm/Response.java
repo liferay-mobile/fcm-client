@@ -16,6 +16,7 @@ package com.liferay.mobile.fcm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,16 +61,52 @@ public class Response {
 		return httpResponse().code();
 	}
 
+	public static class Builder {
+
+		public Builder numberOfFailedMessages(int numberOfFailedMessages) {
+			this.numberOfFailedMessages = numberOfFailedMessages;
+			return this;
+		}
+
+		public Builder numberOfSucceededMessages(
+			int numberOfSucceededMessages) {
+
+			this.numberOfSucceededMessages = numberOfSucceededMessages;
+			return this;
+		}
+
+		public Builder result(Result result) {
+			this.result = result;
+			return this;
+		}
+
+		public Response build() {
+			return new Response(this);
+		}
+
+		int numberOfFailedMessages;
+		int numberOfSucceededMessages;
+		Result result;
+
+	}
+
+	protected Response(Builder builder) {
+		this.numberOfFailedMessages = builder.numberOfFailedMessages;
+		this.numberOfSucceededMessages = builder.numberOfSucceededMessages;
+		this.results = new ArrayList<>();
+		this.results.add(builder.result);
+	}
+
 	protected okhttp3.Response httpResponse;
 
 	@SerializedName("multicast_id")
 	protected long multicastId;
 	@SerializedName("failure")
-	protected int numberOfFailedMessages;
+	protected final int numberOfFailedMessages;
 	@SerializedName("canonical_ids")
 	protected int numberOfNewTokens;
 	@SerializedName("success")
-	protected int numberOfSucceededMessages;
-	protected List<Result> results;
+	protected final int numberOfSucceededMessages;
+	protected final List<Result> results;
 
 }

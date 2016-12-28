@@ -20,6 +20,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Bruno Farache
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 public class ResponseTest {
 
 	@Test
-	public void testSimpleResponse() {
+	public void testResponse() {
 		String json = "{" +
 			"\"multicast_id\": 108," +
 			"\"success\": 1," +
@@ -48,6 +49,7 @@ public class ResponseTest {
 
 		List<Result> results = response.results();
 		assertEquals(1, results.size());
+		assertEquals("1:08", results.get(0).messageId());
 	}
 
 	@Test
@@ -87,5 +89,52 @@ public class ResponseTest {
 		assertEquals("NotRegistered", results.get(5).error());
 	}
 
+	@Test
+	public void testTopicResponseFailed() {
+		String json = "{" +
+			"\"error\": \"TopicsMessageRateExceeded\"" +
+		"}";
+
+		Response response = Sender.fromJson(
+			new StringReader(json), Response.class);
+
+		assertEquals(0, response.multicastId());
+		assertEquals(1, response.numberOfFailedMessages());
+		assertEquals(0, response.numberOfNewTokens());
+		assertEquals(0, response.numberOfSucceededMessages());
+
+		List<Result> results = response.results();
+		assertEquals(1, results.size());
+
+		Result result = results.get(0);
+
+		assertEquals("TopicsMessageRateExceeded", result.error());
+		assertNull(result.messageId());
+		assertNull(result.newToken());
+	}
+
+	@Test
+	public void testTopicResponseSucceeded() {
+		String json = "{" +
+			"\"message_id\": \"1\"" +
+		"}";
+
+		Response response = Sender.fromJson(
+			new StringReader(json), Response.class);
+
+		assertEquals(0, response.multicastId());
+		assertEquals(0, response.numberOfFailedMessages());
+		assertEquals(0, response.numberOfNewTokens());
+		assertEquals(1, response.numberOfSucceededMessages());
+
+		List<Result> results = response.results();
+		assertEquals(1, results.size());
+
+		Result result = results.get(0);
+
+		assertEquals("1", result.messageId());
+		assertNull(result.error());
+		assertNull(result.newToken());
+	}
 
 }

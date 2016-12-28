@@ -139,18 +139,18 @@ public class Notification {
 			return new Notification(this);
 		}
 
-		protected String badge;
-		protected String body;
-		protected String bodyLocalizationKey;
-		protected String[] bodyLocalizationArguments;
-		protected String clickAction;
-		protected String color;
-		protected String icon;
-		protected String sound;
-		protected String tag;
-		protected String title;
-		protected String titleLocalizationKey;
-		protected String[] titleLocalizationArguments;
+		String badge;
+		String body;
+		String bodyLocalizationKey;
+		String[] bodyLocalizationArguments;
+		String clickAction;
+		String color;
+		String icon;
+		String sound;
+		String tag;
+		String title;
+		String titleLocalizationKey;
+		String[] titleLocalizationArguments;
 
 	}
 

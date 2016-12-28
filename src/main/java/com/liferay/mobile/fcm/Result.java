@@ -33,9 +33,35 @@ public class Result {
 		return newToken;
 	}
 
-	protected String error;
+	public static class Builder {
+
+		public Builder error(String error) {
+			this.error = error;
+			return this;
+		}
+
+		public Builder messageId(String messageId) {
+			this.messageId = messageId;
+			return this;
+		}
+
+		public Result build() {
+			return new Result(this);
+		}
+
+		String error;
+		String messageId;
+
+	}
+
+	protected Result(Builder builder) {
+		this.error = builder.error;
+		this.messageId = builder.messageId;
+	}
+
+	protected final String error;
 	@SerializedName("message_id")
-	protected String messageId;
+	protected final String messageId;
 	@SerializedName("registration_id")
 	protected String newToken;
 

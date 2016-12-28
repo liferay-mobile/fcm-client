@@ -181,17 +181,17 @@ public class Message {
 			return new Message(this);
 		}
 
-		protected String collapseKey;
-		protected String condition;
-		protected Boolean contentAvailable;
-		protected Object data;
-		protected Boolean dryRun;
-		protected String[] multicast;
-		protected Notification notification;
-		protected Priority priority;
-		protected String restrictedPackageName;
-		protected Integer timeToLive;
-		protected String to;
+		String collapseKey;
+		String condition;
+		Boolean contentAvailable;
+		Object data;
+		Boolean dryRun;
+		String[] multicast;
+		Notification notification;
+		Priority priority;
+		String restrictedPackageName;
+		Integer timeToLive;
+		String to;
 
 	}
 

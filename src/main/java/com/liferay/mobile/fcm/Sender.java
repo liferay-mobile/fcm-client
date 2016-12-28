@@ -16,6 +16,7 @@ package com.liferay.mobile.fcm;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.liferay.mobile.fcm.json.ResponseDeserializer;
 
 import java.io.Reader;
 
@@ -84,6 +85,8 @@ public class Sender {
 	protected static Gson gson() {
 		if (gson == null) {
 			gson = new GsonBuilder()
+				.registerTypeAdapter(
+					Response.class, new ResponseDeserializer())
 				.disableHtmlEscaping()
 				.create();
 		}
