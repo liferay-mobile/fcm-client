@@ -127,7 +127,18 @@ public class IntegrationTest {
 		try {
 			MockWebServer server = new MockWebServer();
 			server.start();
-			server.enqueue(new MockResponse());
+
+			String body = "{" +
+				"\"multicast_id\": 108," +
+				"\"success\": 1," +
+				"\"failure\": 0," +
+				"\"canonical_ids\": 0," +
+				"\"results\": [" +
+				"{\"message_id\": \"1:08\"}" +
+				"]" +
+			"}";
+
+			server.enqueue(new MockResponse().setBody(body));
 
 			String url = server.url("/fcm/send").toString();
 			sender = new RxSender(new Sender(config.key, url));
