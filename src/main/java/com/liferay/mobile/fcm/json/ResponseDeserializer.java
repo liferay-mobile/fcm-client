@@ -77,9 +77,9 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 		if (failedRegistrationsIds != null) {
 			for (JsonElement jsonElement : failedRegistrationsIds) {
 				Result result = new Result.Builder()
-						.token(jsonElement.getAsString())
-						.error(FAILURE)
-						.build();
+					.token(jsonElement.getAsString())
+					.error(FAILURE)
+					.build();
 
 				builder.result(result);
 			}
