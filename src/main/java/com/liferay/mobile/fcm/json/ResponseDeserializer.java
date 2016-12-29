@@ -123,8 +123,11 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 	protected boolean isDeviceGroupResponse(JsonElement json) {
 		JsonObject root = json.getAsJsonObject();
 
-		return (root.has(FAILED_REGISTRATION_IDS) ||
-			(root.size() == 2) && root.has(FAILURE)) && (root.has(SUCCESS));
+		if (root.has(FAILED_REGISTRATION_IDS)) {
+			return true;
+		}
+
+		return (root.size() == 2) && root.has(FAILURE) && root.has(SUCCESS);
 	}
 
 	protected boolean isTopicResponse(JsonElement json) {

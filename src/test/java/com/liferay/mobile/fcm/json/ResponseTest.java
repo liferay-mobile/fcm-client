@@ -12,9 +12,11 @@
  * details.
  */
 
-package com.liferay.mobile.fcm;
+package com.liferay.mobile.fcm.json;
 
-import com.liferay.mobile.fcm.json.Json;
+import com.google.gson.JsonObject;
+import com.liferay.mobile.fcm.Response;
+import com.liferay.mobile.fcm.Result;
 
 import org.junit.Test;
 
@@ -22,6 +24,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -194,6 +197,23 @@ public class ResponseTest {
 		assertNull(succeeded.messageId());
 		assertNull(succeeded.error());
 		assertNull(succeeded.newToken());
+	}
+
+	@Test
+	public void testIsDeviceGroupResponse() {
+		ResponseDeserializer deserializer = new ResponseDeserializer();
+
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("multicast_id", 1);
+		jsonObject.addProperty("success", 1);
+
+		assertFalse(deserializer.isDeviceGroupResponse(jsonObject));
+
+		jsonObject = new JsonObject();
+		jsonObject.addProperty("multicast_id", 1);
+		jsonObject.addProperty("failure", 1);
+
+		assertFalse(deserializer.isDeviceGroupResponse(jsonObject));
 	}
 
 }
