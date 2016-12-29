@@ -15,14 +15,14 @@
 package com.liferay.mobile.fcm.json;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.liferay.mobile.fcm.Response;
 
-import com.google.gson.JsonDeserializer;
+import com.liferay.mobile.fcm.Response;
 import com.liferay.mobile.fcm.Result;
 
 import java.lang.reflect.Type;
@@ -34,7 +34,14 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 
 	public static final String ERROR = "error";
 
+	public static final String FAILED_REGISTRATION_IDS =
+		"failed_registration_ids";
+
+	public static final String FAILURE = "failure";
+
 	public static final String MESSAGE_ID = "message_id";
+
+	public static final String SUCCESS = "success";
 
 	@Override
 	public Response deserialize(
@@ -44,8 +51,47 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 		if (isTopicResponse(json)) {
 			return createTopicResponse(json);
 		}
+		else if (isDeviceGroupResponse(json)) {
+			return createDeviceGroupResponse(json);
+		}
 
 		return gson().fromJson(json.getAsJsonObject(), Response.class);
+	}
+
+	protected Response createDeviceGroupResponse(JsonElement json) {
+		JsonObject root = json.getAsJsonObject();
+
+		Response.Builder builder = new Response.Builder();
+
+		int succeededMessages = root
+			.getAsJsonPrimitive(SUCCESS)
+			.getAsInt();
+
+		for (int i = 0; i < succeededMessages; i++) {
+			builder.result(new Result.Builder().build());
+		}
+
+		JsonArray failedRegistrationsIds = root.getAsJsonArray(
+			FAILED_REGISTRATION_IDS);
+
+		if (failedRegistrationsIds != null) {
+			for (JsonElement jsonElement : failedRegistrationsIds) {
+				Result result = new Result.Builder()
+						.token(jsonElement.getAsString())
+						.error(FAILURE)
+						.build();
+
+				builder.result(result);
+			}
+		}
+
+		int failedMessages = root.getAsJsonPrimitive(FAILURE).getAsInt();
+
+		builder
+			.numberOfSucceededMessages(succeededMessages)
+			.numberOfFailedMessages(failedMessages);
+
+		return builder.build();
 	}
 
 	protected Response createTopicResponse(JsonElement json) {
@@ -72,6 +118,13 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
 		}
 
 		return builder.build();
+	}
+
+	protected boolean isDeviceGroupResponse(JsonElement json) {
+		JsonObject root = json.getAsJsonObject();
+
+		return (root.has(FAILED_REGISTRATION_IDS) ||
+			(root.size() == 2) && root.has(FAILURE)) && (root.has(SUCCESS));
 	}
 
 	protected boolean isTopicResponse(JsonElement json) {

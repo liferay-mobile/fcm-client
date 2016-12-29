@@ -76,7 +76,13 @@ public class Response {
 		}
 
 		public Builder result(Result result) {
-			this.result = result;
+			List<Result> results = new ArrayList<>();
+			results.add(result);
+			return results(results);
+		}
+
+		public Builder results(List<Result> results) {
+			this.results.addAll(results);
 			return this;
 		}
 
@@ -86,15 +92,14 @@ public class Response {
 
 		int numberOfFailedMessages;
 		int numberOfSucceededMessages;
-		Result result;
+		List<Result> results = new ArrayList<>();
 
 	}
 
 	protected Response(Builder builder) {
 		this.numberOfFailedMessages = builder.numberOfFailedMessages;
 		this.numberOfSucceededMessages = builder.numberOfSucceededMessages;
-		this.results = new ArrayList<>();
-		this.results.add(builder.result);
+		this.results = builder.results;
 	}
 
 	protected okhttp3.Response httpResponse;

@@ -22,6 +22,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -108,11 +109,11 @@ public class ResponseTest {
 		List<Result> results = response.results();
 		assertEquals(1, results.size());
 
-		Result result = results.get(0);
+		Result failed = results.get(0);
 
-		assertEquals("TopicsMessageRateExceeded", result.error());
-		assertNull(result.messageId());
-		assertNull(result.newToken());
+		assertEquals("TopicsMessageRateExceeded", failed.error());
+		assertNull(failed.messageId());
+		assertNull(failed.newToken());
 	}
 
 	@Test
@@ -131,12 +132,68 @@ public class ResponseTest {
 
 		List<Result> results = response.results();
 		assertEquals(1, results.size());
+		assertEquals("1", results.get(0).messageId());
+	}
 
-		Result result = results.get(0);
+	@Test
+	public void testDeviceGroupResponseFailed() {
+		String json = "{" +
+			"\"success\":1," +
+			"\"failure\":2," +
+			"\"failed_registration_ids\":[" +
+				"\"1\"," +
+				"\"2\"" +
+			"]" +
+		"}";
 
-		assertEquals("1", result.messageId());
-		assertNull(result.error());
-		assertNull(result.newToken());
+		Response response = Json.fromJson(
+			new StringReader(json), Response.class);
+
+		assertEquals(0, response.multicastId());
+		assertEquals(2, response.numberOfFailedMessages());
+		assertEquals(0, response.numberOfNewTokens());
+		assertEquals(1, response.numberOfSucceededMessages());
+
+		List<Result> results = response.results();
+		assertEquals(3, results.size());
+
+		Result succeeded = results.get(0);
+		assertNotNull(succeeded);
+		assertNull(succeeded.error());
+
+		Result failed1 = results.get(1);
+		assertEquals("1", failed1.token());
+		assertNotNull(failed1.error());
+
+		Result failed2 = results.get(2);
+		assertEquals("2", failed2.token());
+		assertNotNull(failed2.error());
+	}
+
+	@Test
+	public void testDeviceGroupResponseSucceeded() {
+		String json = "{" +
+			"\"success\": 1," +
+			"\"failure\": 0" +
+		"}";
+
+		Response response = Json.fromJson(
+			new StringReader(json), Response.class);
+
+		assertEquals(0, response.multicastId());
+		assertEquals(0, response.numberOfFailedMessages());
+		assertEquals(0, response.numberOfNewTokens());
+		assertEquals(1, response.numberOfSucceededMessages());
+
+		List<Result> results = response.results();
+		assertEquals(1, results.size());
+
+		Result succeeded = results.get(0);
+
+		assertNotNull(succeeded);
+		assertNull(succeeded.messageId());
+		assertNull(succeeded.error());
+		assertNull(succeeded.newToken());
 	}
 
 }
