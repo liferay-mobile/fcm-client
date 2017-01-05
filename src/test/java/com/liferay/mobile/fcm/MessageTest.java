@@ -160,6 +160,27 @@ public class MessageTest {
 		assertEquals(1, message.timeToLive());
 	}
 
+	@Test
+	public void testMessageWithTimeToLiveWithOneHour()
+		throws ExceededTimeToLive {
+
+		Message message = new Message.Builder()
+			.timeToLive(1, TimeUnit.HOURS)
+			.build();
+
+		String json = Json.toJson(message);
+
+		int secondsInOneHour = 60 * 60;
+
+		assertEquals(
+			"{" +
+				"\"time_to_live\":" + secondsInOneHour +
+			"}",
+			json);
+
+		assertEquals(secondsInOneHour, message.timeToLive());
+	}
+
 	@Test(expected = ExceededTimeToLive.class)
 	public void testMulticastMessageWithExceededTimeToLive()
 		throws ExceededTimeToLive {
