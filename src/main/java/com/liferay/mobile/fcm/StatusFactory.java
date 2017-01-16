@@ -76,7 +76,7 @@ public class StatusFactory {
 			String[] multicast = message.multicast();
 			String token = message.to();
 
-			if ((multicast != null) && multicast.length == results.size()) {
+			if ((multicast != null) && (multicast.length == results.size())) {
 				token = multicast[i];
 			}
 

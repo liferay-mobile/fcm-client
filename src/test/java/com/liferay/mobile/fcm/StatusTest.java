@@ -14,6 +14,9 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.json.Json;
+import com.liferay.mobile.fcm.json.Response;
+
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -122,6 +125,31 @@ public class StatusTest {
 		assertEquals("1", result.token());
 		assertNull(result.newToken());
 		assertNull(result.error());
+	}
+
+	@Test
+	public void testMulticastMessageInvalid() throws Exception {
+		String json = "{" +
+			"\"multicast_id\": 216," +
+			"\"success\": 1," +
+			"\"failure\": 0," +
+			"\"canonical_ids\": 0," +
+			"\"results\": [" +
+				"{\"message_id\": \"1:0408\"}" +
+			"]" +
+		"}";
+
+		Message message = new Message.Builder()
+			.multicast("1", "2")
+			.build();
+
+		Response response = Json.fromJson(new StringReader(json), Response.class);
+
+		Status status = new StatusFactory().createMulticastStatus(
+			message, response);
+
+		assertEquals(1, status.succeeded().size());
+		assertNull(status.succeeded().get(0).token());
 	}
 
 	@Test

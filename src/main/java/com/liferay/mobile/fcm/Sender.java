@@ -57,11 +57,6 @@ public class Sender {
 		return url;
 	}
 
-	public Sender statusFactory(StatusFactory statusFactory) {
-		this.statusFactory = statusFactory;
-		return this;
-	}
-
 	protected Sender(String key, String url) {
 		this.client = new OkHttpClient();
 		this.key = key;

@@ -39,14 +39,6 @@ public class Response {
 		return multicastId;
 	}
 
-	public int numberOfFailedMessages() {
-		return numberOfFailedMessages;
-	}
-
-	public int numberOfNewTokens() {
-		return numberOfNewTokens;
-	}
-
 	public int numberOfSucceededMessages() {
 		return numberOfSucceededMessages;
 	}
@@ -62,10 +54,6 @@ public class Response {
 	protected String messageId;
 	@SerializedName("multicast_id")
 	protected long multicastId;
-	@SerializedName("failure")
-	protected int numberOfFailedMessages;
-	@SerializedName("canonical_ids")
-	protected int numberOfNewTokens;
 	@SerializedName("success")
 	protected int numberOfSucceededMessages;
 	protected List<Result> results;
