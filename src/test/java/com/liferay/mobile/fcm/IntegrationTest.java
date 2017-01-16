@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.fcm;
 
-import com.liferay.mobile.fcm.exception.InvalidTopicName;
-
 import org.junit.Test;
 
 import java.io.IOException;
@@ -49,9 +47,19 @@ public class IntegrationTest {
 		sender
 			.send(message)
 			.test()
+			.assertNoErrors()
 			.assertValue(Status::isSuccessful)
 			.assertValue(status -> (200 == status.httpStatusCode()))
-			.assertNoErrors();
+			.assertValue(status -> (status.multicastId() > 0))
+			.assertValue(status -> (0 == status.failed().size()))
+			.assertValue(status -> (1 == status.succeeded().size()))
+			.assertValue(status -> {
+				if (status.succeeded().get(0).messageId() != null) {
+					return true;
+				}
+
+				return false;
+			});
 	}
 
 	@Test
@@ -69,30 +77,19 @@ public class IntegrationTest {
 		sender()
 			.send(message)
 			.test()
+			.assertNoErrors()
 			.assertValue(Status::isSuccessful)
 			.assertValue(status -> (200 == status.httpStatusCode()))
-			.assertNoErrors();
-	}
+			.assertValue(status -> (status.multicastId() > 0))
+			.assertValue(status -> (0 == status.failed().size()))
+			.assertValue(status -> (1 == status.succeeded().size()))
+			.assertValue(status -> {
+				if (status.succeeded().get(0).messageId() != null) {
+					return true;
+				}
 
-	@Test
-	public void testSendNotificationToTopic() throws InvalidTopicName {
-		String news = "news";
-
-		Notification notification = new Notification.Builder()
-			.title(news)
-			.build();
-
-		Message message = new Message.Builder()
-			.to(new Topic(news))
-			.notification(notification)
-			.build();
-
-		sender()
-			.send(message)
-			.test()
-			.assertValue(Status::isSuccessful)
-			.assertValue(status -> (200 == status.httpStatusCode()))
-			.assertNoErrors();
+				return false;
+			});
 	}
 
 	@Test
@@ -112,9 +109,19 @@ public class IntegrationTest {
 		sender()
 			.send(message)
 			.test()
+			.assertNoErrors()
 			.assertValue(Status::isSuccessful)
 			.assertValue(status -> (200 == status.httpStatusCode()))
-			.assertNoErrors();
+			.assertValue(status -> (status.multicastId() > 0))
+			.assertValue(status -> (0 == status.failed().size()))
+			.assertValue(status -> (1 == status.succeeded().size()))
+			.assertValue(status -> {
+				if (status.succeeded().get(0).messageId() != null) {
+					return true;
+				}
+
+				return false;
+			});
 	}
 
 	protected RxSender sender() {
