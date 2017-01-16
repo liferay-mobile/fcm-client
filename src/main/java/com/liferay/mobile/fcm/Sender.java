@@ -16,10 +16,13 @@ package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.json.Json;
 
+import java.io.Reader;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * @author Bruno Farache
@@ -35,20 +38,30 @@ public class Sender {
 		this(key, URL);
 	}
 
+	public Status send(Message message) throws Exception {
+		Request request = createRequest(message);
+		Response response = client.newCall(request).execute();
+		Reader body = response.body().charStream();
+		return statusFactory.createStatus(message, body);
+	}
+
+	public String key() {
+		return key;
+	}
+
+	public String url() {
+		return url;
+	}
+
+	public Sender statusFactory(StatusFactory statusFactory) {
+		this.statusFactory = statusFactory;
+		return this;
+	}
+
 	protected Sender(String key, String url) {
 		this.client = new OkHttpClient();
 		this.key = key;
 		this.url = url;
-	}
-
-	public Response send(Message message) throws Exception {
-		Request request = createRequest(message);
-		okhttp3.Response httpResponse = client.newCall(request).execute();
-
-		Response response = Json.fromJson(
-			httpResponse.body().charStream(), Response.class);
-
-		return response.httpResponse(httpResponse);
 	}
 
 	protected Request createRequest(Message message) {
@@ -62,19 +75,13 @@ public class Sender {
 			.build();
 	}
 
-	public String key() {
-		return key;
-	}
-
-	public String url() {
-		return url;
-	}
-
 	protected final OkHttpClient client;
 
 	protected final MediaType contentType = MediaType.parse("application/json");
 
 	protected final String key;
+
+	protected StatusFactory statusFactory = new StatusFactory();
 
 	protected final String url;
 

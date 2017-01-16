@@ -14,6 +14,8 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.json.Response;
+
 import io.reactivex.Single;
 
 /**
@@ -31,7 +33,7 @@ public class RxSender {
 		this.sender = sender;
 	}
 
-	public Single<Response> send(Message message) {
+	public Single<Status> send(Message message) {
 		return Single.fromCallable(() ->
 			sender.send(message)
 		);

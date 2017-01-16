@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.mobile.fcm;
+package com.liferay.mobile.fcm.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -33,48 +33,10 @@ public class Result {
 		return newToken;
 	}
 
-	public String token() {
-		return token;
-	}
-
-	public static class Builder {
-
-		public Builder error(String error) {
-			this.error = error;
-			return this;
-		}
-
-		public Builder messageId(String messageId) {
-			this.messageId = messageId;
-			return this;
-		}
-
-		public Builder token(String token) {
-			this.token = token;
-			return this;
-		}
-
-		public Result build() {
-			return new Result(this);
-		}
-
-		String error;
-		String messageId;
-		String token;
-
-	}
-
-	protected Result(Builder builder) {
-		this.error = builder.error;
-		this.messageId = builder.messageId;
-		this.token = builder.token;
-	}
-
-	protected final String error;
+	protected String error;
 	@SerializedName("message_id")
-	protected final String messageId;
+	protected String messageId;
 	@SerializedName("registration_id")
 	protected String newToken;
-	protected final String token;
 
 }

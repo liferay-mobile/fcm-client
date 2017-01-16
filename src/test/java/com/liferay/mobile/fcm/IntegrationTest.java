@@ -49,8 +49,8 @@ public class IntegrationTest {
 		sender
 			.send(message)
 			.test()
-			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.statusCode()))
+			.assertValue(Status::isSuccessful)
+			.assertValue(status -> (200 == status.httpStatusCode()))
 			.assertNoErrors();
 	}
 
@@ -69,8 +69,8 @@ public class IntegrationTest {
 		sender()
 			.send(message)
 			.test()
-			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.statusCode()))
+			.assertValue(Status::isSuccessful)
+			.assertValue(status -> (200 == status.httpStatusCode()))
 			.assertNoErrors();
 	}
 
@@ -90,8 +90,8 @@ public class IntegrationTest {
 		sender()
 			.send(message)
 			.test()
-			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.statusCode()))
+			.assertValue(Status::isSuccessful)
+			.assertValue(status -> (200 == status.httpStatusCode()))
 			.assertNoErrors();
 	}
 
@@ -112,8 +112,8 @@ public class IntegrationTest {
 		sender()
 			.send(message)
 			.test()
-			.assertValue(Response::isSuccessful)
-			.assertValue(response -> (200 == response.statusCode()))
+			.assertValue(Status::isSuccessful)
+			.assertValue(status -> (200 == status.httpStatusCode()))
 			.assertNoErrors();
 	}
 
@@ -134,7 +134,7 @@ public class IntegrationTest {
 				"\"failure\": 0," +
 				"\"canonical_ids\": 0," +
 				"\"results\": [" +
-				"{\"message_id\": \"1:08\"}" +
+					"{\"message_id\": \"1:08\"}" +
 				"]" +
 			"}";
 
