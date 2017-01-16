@@ -41,8 +41,12 @@ public class Sender {
 	public Status send(Message message) throws Exception {
 		Request request = createRequest(message);
 		Response response = client.newCall(request).execute();
+
 		Reader body = response.body().charStream();
-		return statusFactory.createStatus(message, body);
+		Status status = statusFactory.createStatus(message, body);
+		status.httpResponse(response);
+
+		return status;
 	}
 
 	public String key() {

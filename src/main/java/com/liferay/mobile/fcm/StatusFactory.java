@@ -73,12 +73,18 @@ public class StatusFactory {
 
 		for (int i = 0; i < results.size(); i++) {
 			Result result = results.get(i);
+			String[] multicast = message.multicast();
+			String token = message.to();
+
+			if ((multicast != null) && multicast.length == results.size()) {
+				token = multicast[i];
+			}
 
 			if (result.error() == null) {
 				MessageResult.Builder messageResult =
 					new MessageResult.Builder()
 						.messageId(result.messageId())
-						.token(message.multicast()[i]);
+						.token(token);
 
 				if (result.newToken() != null) {
 					messageResult.newToken(result.newToken());
@@ -90,7 +96,7 @@ public class StatusFactory {
 				MessageResult.Builder messageResult =
 					new MessageResult.Builder()
 						.error(result.error())
-						.token(message.multicast()[i]);
+						.token(token);
 
 				builder.addFailure(messageResult.build());
 			}
