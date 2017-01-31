@@ -1,0 +1,17 @@
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+	user = findProperty('user') ?: ''
+	key = findProperty('key') ?: ''
+
+	publications = ['mavenJava']
+	publish = true
+
+	pkg {
+		repo = 'liferay-mobile'
+		name = project.archivesBaseName
+		userOrg = 'liferay'
+		licenses = ['LGPL-2.1']
+		vcsUrl = 'https://github.com/liferay-mobile/fcm-client.git'
+	}
+}
