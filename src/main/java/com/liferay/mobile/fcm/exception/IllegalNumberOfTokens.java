@@ -19,12 +19,12 @@ import java.util.List;
 /**
  * @author Bruno Farache
  */
-public class ExceededNumberOfMulticastTokens extends Exception {
+public class IllegalNumberOfTokens extends RuntimeException {
 
-	public ExceededNumberOfMulticastTokens(List<String> tokens) {
+	public IllegalNumberOfTokens(List<String> tokens) {
 		super(
-			"Up to 1000 tokens are allowed for a multicast message, there " +
-				"are " + tokens.size() +  "tokens");
+			"Up to 1000 tokens are allowed for a multicast message, there are" +
+				" " + tokens.size() +  "tokens");
 	}
 
 }

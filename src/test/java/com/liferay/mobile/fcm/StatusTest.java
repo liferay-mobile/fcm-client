@@ -108,7 +108,7 @@ public class StatusTest {
 		"}";
 
 		Message message = new Message.Builder()
-			.multicast("1")
+			.to("1")
 			.build();
 
 		Status status = new StatusFactory().createStatus(
@@ -128,7 +128,7 @@ public class StatusTest {
 	}
 
 	@Test
-	public void testMulticastMessageInvalid() throws Exception {
+	public void testMulticastMessageInvalidNumberOfToTokens() throws Exception {
 		String json = "{" +
 			"\"multicast_id\": 216," +
 			"\"success\": 1," +
@@ -140,10 +140,11 @@ public class StatusTest {
 		"}";
 
 		Message message = new Message.Builder()
-			.multicast("1", "2")
+			.to("1", "2")
 			.build();
 
-		Response response = Json.fromJson(new StringReader(json), Response.class);
+		Response response = Json.fromJson(
+			new StringReader(json), Response.class);
 
 		Status status = new StatusFactory().createMulticastStatus(
 			message, response);
@@ -170,7 +171,7 @@ public class StatusTest {
 		"}";
 
 		Message message = new Message.Builder()
-			.multicast("1", "2", "3", "4", "5", "6")
+			.to("1", "2", "3", "4", "5", "6")
 			.build();
 
 		Status status = new StatusFactory().createStatus(
@@ -180,17 +181,34 @@ public class StatusTest {
 
 		List<MessageResult> failed = status.failed();
 		assertEquals(3, failed.size());
-		assertEquals("Unavailable", failed.get(0).error());
-		assertEquals("InvalidRegistration", failed.get(1).error());
-		assertEquals("NotRegistered", failed.get(2).error());
+
+		MessageResult failed1 = failed.get(0);
+		assertEquals("Unavailable", failed1.error());
+		assertEquals("2", failed1.token());
+
+		MessageResult failed2 = failed.get(1);
+		assertEquals("InvalidRegistration", failed2.error());
+		assertEquals("3", failed2.token());
+
+		MessageResult failed3 = failed.get(2);
+		assertEquals("NotRegistered", failed3.error());
+		assertEquals("6", failed3.token());
 
 		List<MessageResult> succeeded = status.succeeded();
 		assertEquals(3, succeeded.size());
 
-		assertEquals("1:0408", succeeded.get(0).messageId());
-		assertEquals("1:1516", succeeded.get(1).messageId());
-		assertEquals("1:2342", succeeded.get(2).messageId());
-		assertEquals("32", succeeded.get(2).newToken());
+		MessageResult succeeded1 = succeeded.get(0);
+		assertEquals("1:0408", succeeded1.messageId());
+		assertEquals("1", succeeded1.token());
+
+		MessageResult succeeded2 = succeeded.get(1);
+		assertEquals("1:1516", succeeded2.messageId());
+		assertEquals("4", succeeded2.token());
+
+		MessageResult succeeded3 = succeeded.get(2);
+		assertEquals("1:2342", succeeded3.messageId());
+		assertEquals("32", succeeded3.newToken());
+		assertEquals("5", succeeded3.token());
 	}
 
 	@Test

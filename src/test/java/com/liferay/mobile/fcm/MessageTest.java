@@ -15,7 +15,7 @@
 package com.liferay.mobile.fcm;
 
 import com.liferay.mobile.fcm.Message.Priority;
-import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
+import com.liferay.mobile.fcm.exception.IllegalNumberOfTokens;
 import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
 import com.liferay.mobile.fcm.json.Json;
 
@@ -197,11 +197,11 @@ public class MessageTest {
 	}
 
 	@Test
-	public void testMulticastMessage() throws ExceededNumberOfMulticastTokens {
+	public void testMulticastMessage() {
 		String[] tokens = new String[] {"1", "2"};
 
 		Message message = new Message.Builder()
-			.multicast(tokens)
+			.to(tokens)
 			.build();
 
 		String json = Json.toJson(message);
@@ -215,12 +215,17 @@ public class MessageTest {
 		assertArrayEquals(tokens, message.multicast().toArray());
 	}
 
-	@Test(expected = ExceededNumberOfMulticastTokens.class)
-	public void testMulticastMessageWithExceededNumberOfTokens()
-		throws ExceededNumberOfMulticastTokens {
-
+	@Test(expected = IllegalNumberOfTokens.class)
+	public void testMulticastMessageWithExceededNumberOfTokens() {
 		new Message.Builder()
-			.multicast(new String[1001])
+			.to(new String[1001])
+			.build();
+	}
+
+	@Test(expected = IllegalNumberOfTokens.class)
+	public void testMulticastMessageWithZeroTokens() {
+		new Message.Builder()
+			.to(new String[]{})
 			.build();
 	}
 

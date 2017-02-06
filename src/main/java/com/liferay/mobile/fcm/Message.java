@@ -14,7 +14,7 @@
 
 package com.liferay.mobile.fcm;
 
-import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
+import com.liferay.mobile.fcm.exception.IllegalNumberOfTokens;
 import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
 
 import java.util.Arrays;
@@ -130,23 +130,6 @@ public class Message {
 			return this;
 		}
 
-		public Builder multicast(List<String> tokens)
-			throws ExceededNumberOfMulticastTokens {
-
-			if (tokens.size() > 1000) {
-				throw new ExceededNumberOfMulticastTokens(tokens);
-			}
-
-			this.multicast = tokens;
-			return this;
-		}
-
-		public Builder multicast(String... tokens)
-			throws ExceededNumberOfMulticastTokens {
-
-			return this.multicast(Arrays.asList(tokens));
-		}
-
 		public Builder notification(Notification notification) {
 			this.notification = notification;
 			return this;
@@ -163,11 +146,27 @@ public class Message {
 		}
 
 		public Builder to(Topic topic) {
-			return to(topic.path());
+			to(topic.path());
+			return this;
 		}
 
-		public Builder to(String token) {
-			this.to = token;
+		public Builder to(String... tokens) {
+			if (tokens.length == 1) {
+				this.to = tokens[0];
+			}
+			else {
+				this.to(Arrays.asList(tokens));
+			}
+
+			return this;
+		}
+
+		public Builder to(List<String> tokens) {
+			if ((tokens.size() == 0) || (tokens.size() > 1000)) {
+				throw new IllegalNumberOfTokens(tokens);
+			}
+
+			this.multicast = tokens;
 			return this;
 		}
 
