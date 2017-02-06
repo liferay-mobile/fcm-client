@@ -15,3 +15,7 @@ bintray {
 		vcsUrl = 'https://github.com/liferay-mobile/fcm-client.git'
 	}
 }
+
+bintrayUpload.dependsOn 'sourceJar'
+bintrayUpload.dependsOn 'assemble'
+bintrayUpload.dependsOn 'generatePomFileForMavenJavaPublication'

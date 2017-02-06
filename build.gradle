@@ -19,7 +19,7 @@ apply plugin: 'maven-publish'
 apply from: 'bintray.gradle'
 
 group 'com.liferay.mobile'
-version '0.1.0'
+version '0.2.0'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -54,6 +54,6 @@ publishing {
 	}
 }
 
-task sourceJar(type: Jar) {
+task sourceJar(type: Jar, dependsOn: classes) {
 	from sourceSets.main.allJava
 }
