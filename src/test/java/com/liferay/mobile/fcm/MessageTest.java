@@ -212,7 +212,7 @@ public class MessageTest {
 			"}",
 			json);
 
-		assertArrayEquals(tokens, message.multicast());
+		assertArrayEquals(tokens, message.multicast().toArray());
 	}
 
 	@Test(expected = ExceededNumberOfMulticastTokens.class)

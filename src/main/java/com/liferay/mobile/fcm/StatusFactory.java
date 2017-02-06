@@ -55,12 +55,12 @@ public class StatusFactory {
 
 		if (failedRegistrationsIds != null) {
 			for (String failedRegistrationsId : failedRegistrationsIds) {
-				MessageResult.Builder messageResult =
+				MessageResult.Builder messageResultBuilder =
 					new MessageResult.Builder()
 						.token(failedRegistrationsId)
 						.error("failed");
 
-				builder.addFailure(messageResult.build());
+				builder.addFailure(messageResultBuilder.build());
 			}
 		}
 
@@ -73,32 +73,28 @@ public class StatusFactory {
 
 		for (int i = 0; i < results.size(); i++) {
 			Result result = results.get(i);
-			String[] multicast = message.multicast();
+			List<String> multicast = message.multicast();
 			String token = message.to();
 
-			if ((multicast != null) && (multicast.length == results.size())) {
-				token = multicast[i];
+			if ((multicast != null) && (multicast.size() == results.size())) {
+				token = multicast.get(i);
 			}
+
+			MessageResult.Builder messageResultBuilder =
+				new MessageResult.Builder().token(token);
 
 			if (result.error() == null) {
-				MessageResult.Builder messageResult =
-					new MessageResult.Builder()
-						.messageId(result.messageId())
-						.token(token);
+				messageResultBuilder.messageId(result.messageId());
 
 				if (result.newToken() != null) {
-					messageResult.newToken(result.newToken());
+					messageResultBuilder.newToken(result.newToken());
 				}
 
-				builder.addSuccess(messageResult.build());
+				builder.addSuccess(messageResultBuilder.build());
 			}
 			else {
-				MessageResult.Builder messageResult =
-					new MessageResult.Builder()
-						.error(result.error())
-						.token(token);
-
-				builder.addFailure(messageResult.build());
+				messageResultBuilder.error(result.error());
+				builder.addFailure(messageResultBuilder.build());
 			}
 		}
 
@@ -108,21 +104,16 @@ public class StatusFactory {
 	protected Status createTopicStatus(Message message, Response response) {
 		Status.Builder builder = new Status.Builder();
 
-		if (response.error() != null) {
-			MessageResult messageResult = new MessageResult.Builder()
-				.token(message.to())
-				.error(response.error())
-				.build();
+		MessageResult.Builder messageResultBuilder = new MessageResult.Builder()
+			.token(message.to());
 
-			builder.addFailure(messageResult);
+		if (response.error() != null) {
+			messageResultBuilder.error(response.error());
+			builder.addFailure(messageResultBuilder.build());
 		}
 		else {
-			MessageResult messageResult = new MessageResult.Builder()
-				.token(message.to())
-				.messageId(response.messageId())
-				.build();
-
-			builder.addSuccess(messageResult);
+			messageResultBuilder.messageId(response.messageId());
+			builder.addSuccess(messageResultBuilder.build());
 		}
 
 		return builder.build();

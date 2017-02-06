@@ -17,6 +17,8 @@ package com.liferay.mobile.fcm;
 import com.liferay.mobile.fcm.exception.ExceededNumberOfMulticastTokens;
 import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gson.annotations.SerializedName;
@@ -54,7 +56,7 @@ public class Message {
 		return dryRun;
 	}
 
-	public String[] multicast() {
+	public List<String> multicast() {
 		return multicast;
 	}
 
@@ -128,15 +130,21 @@ public class Message {
 			return this;
 		}
 
-		public Builder multicast(String... tokens)
+		public Builder multicast(List<String> tokens)
 			throws ExceededNumberOfMulticastTokens {
 
-			if (tokens.length > 1000) {
+			if (tokens.size() > 1000) {
 				throw new ExceededNumberOfMulticastTokens(tokens);
 			}
 
 			this.multicast = tokens;
 			return this;
+		}
+
+		public Builder multicast(String... tokens)
+			throws ExceededNumberOfMulticastTokens {
+
+			return this.multicast(Arrays.asList(tokens));
 		}
 
 		public Builder notification(Notification notification) {
@@ -186,7 +194,7 @@ public class Message {
 		Boolean contentAvailable;
 		Object data;
 		Boolean dryRun;
-		String[] multicast;
+		List<String> multicast;
 		Notification notification;
 		Priority priority;
 		String restrictedPackageName;
@@ -218,7 +226,7 @@ public class Message {
 	@SerializedName("dry_run")
 	protected final Boolean dryRun;
 	@SerializedName("registration_ids")
-	protected final String[] multicast;
+	protected final List<String> multicast;
 	protected final Notification notification;
 	protected final Priority priority;
 	@SerializedName("restricted_package_name")

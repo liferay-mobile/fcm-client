@@ -14,15 +14,17 @@
 
 package com.liferay.mobile.fcm.exception;
 
+import java.util.List;
+
 /**
  * @author Bruno Farache
  */
 public class ExceededNumberOfMulticastTokens extends Exception {
 
-	public ExceededNumberOfMulticastTokens(String... tokens) {
+	public ExceededNumberOfMulticastTokens(List<String> tokens) {
 		super(
 			"Up to 1000 tokens are allowed for a multicast message, there " +
-				"are " + tokens.length +  "tokens");
+				"are " + tokens.size() +  "tokens");
 	}
 
 }
