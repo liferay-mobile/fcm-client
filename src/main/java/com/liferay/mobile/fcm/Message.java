@@ -18,6 +18,7 @@ import com.liferay.mobile.fcm.exception.IllegalNumberOfTokens;
 import com.liferay.mobile.fcm.exception.ExceededTimeToLive;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -166,7 +167,7 @@ public class Message {
 				throw new IllegalNumberOfTokens(tokens);
 			}
 
-			this.multicast = tokens;
+			this.multicast = Collections.unmodifiableList(tokens);
 			return this;
 		}
 

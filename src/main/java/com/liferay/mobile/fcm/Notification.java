@@ -16,6 +16,10 @@ package com.liferay.mobile.fcm;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Bruno Farache
  */
@@ -33,7 +37,7 @@ public class Notification {
 		return bodyLocalizationKey;
 	}
 
-	public String[] bodyLocalizationArguments() {
+	public List<String> bodyLocalizationArguments() {
 		return bodyLocalizationArguments;
 	}
 
@@ -65,7 +69,7 @@ public class Notification {
 		return titleLocalizationKey;
 	}
 
-	public String[] titleLocalizationArguments() {
+	public List<String> titleLocalizationArguments() {
 		return titleLocalizationArguments;
 	}
 
@@ -89,7 +93,16 @@ public class Notification {
 		public Builder bodyLocalizationArguments(
 			String... bodyLocalizationArguments) {
 
-			this.bodyLocalizationArguments = bodyLocalizationArguments;
+			return bodyLocalizationArguments(
+				Arrays.asList(bodyLocalizationArguments));
+		}
+
+		public Builder bodyLocalizationArguments(
+			List<String> bodyLocalizationArguments) {
+
+			this.bodyLocalizationArguments = Collections.unmodifiableList(
+				bodyLocalizationArguments);
+
 			return this;
 		}
 
@@ -131,7 +144,16 @@ public class Notification {
 		public Builder titleLocalizationArguments(
 			String... titleLocalizationArguments) {
 
-			this.titleLocalizationArguments = titleLocalizationArguments;
+			return titleLocalizationArguments(
+				Arrays.asList(titleLocalizationArguments));
+		}
+
+		public Builder titleLocalizationArguments(
+			List<String> titleLocalizationArguments) {
+
+			this.titleLocalizationArguments = Collections.unmodifiableList(
+				titleLocalizationArguments);
+
 			return this;
 		}
 
@@ -142,7 +164,7 @@ public class Notification {
 		String badge;
 		String body;
 		String bodyLocalizationKey;
-		String[] bodyLocalizationArguments;
+		List<String> bodyLocalizationArguments;
 		String clickAction;
 		String color;
 		String icon;
@@ -150,7 +172,7 @@ public class Notification {
 		String tag;
 		String title;
 		String titleLocalizationKey;
-		String[] titleLocalizationArguments;
+		List<String> titleLocalizationArguments;
 
 	}
 
@@ -174,7 +196,7 @@ public class Notification {
 	@SerializedName("body_loc_key")
 	protected final String bodyLocalizationKey;
 	@SerializedName("body_loc_args")
-	protected final String[] bodyLocalizationArguments;
+	protected final List<String> bodyLocalizationArguments;
 	@SerializedName("click_action")
 	protected final String clickAction;
 	protected final String color;
@@ -185,6 +207,6 @@ public class Notification {
 	@SerializedName("title_loc_key")
 	protected final String titleLocalizationKey;
 	@SerializedName("title_loc_args")
-	protected final String[] titleLocalizationArguments;
+	protected final List<String> titleLocalizationArguments;
 
 }

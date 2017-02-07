@@ -70,20 +70,24 @@ public class NotificationTest {
 		assertEquals(String.valueOf(badge), notification.badge());
 		assertEquals(body, notification.body());
 		assertEquals(bodyLocalizationKey, notification.bodyLocalizationKey());
+
 		assertArrayEquals(
 			bodyLocalizationArguments,
-			notification.bodyLocalizationArguments());
+			notification.bodyLocalizationArguments().toArray());
+
 		assertEquals(action, notification.clickAction());
 		assertEquals(color, notification.color());
 		assertEquals(icon, notification.icon());
 		assertEquals(sound, notification.sound());
 		assertEquals(tag, notification.tag());
 		assertEquals(title, notification.title());
+
 		assertEquals(
-				titleLocalizationKey, notification.titleLocalizationKey());
+			titleLocalizationKey, notification.titleLocalizationKey());
+
 		assertArrayEquals(
 			titleLocalizationArguments,
-			notification.titleLocalizationArguments());
+			notification.titleLocalizationArguments().toArray());
 
 		String json = Json.toJson(notification);
 
