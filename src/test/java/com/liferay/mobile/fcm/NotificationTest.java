@@ -39,7 +39,7 @@ public class NotificationTest {
 
 	@Test
 	public void testNotificationWithAllProperties() {
-		String badge = "badge";
+		int badge = 1;
 		String body = "body";
 		String bodyLocalizationKey = "bodyLocalizationKey";
 		String[] bodyLocalizationArguments = {"foo", "bar"};
@@ -67,7 +67,7 @@ public class NotificationTest {
 			.titleLocalizationArguments(titleLocalizationArguments)
 			.build();
 
-		assertEquals(badge, notification.badge());
+		assertEquals(String.valueOf(badge), notification.badge());
 		assertEquals(body, notification.body());
 		assertEquals(bodyLocalizationKey, notification.bodyLocalizationKey());
 		assertArrayEquals(
@@ -89,7 +89,7 @@ public class NotificationTest {
 
 		assertEquals(json,
 		"{" +
-			"\"badge\":\"badge\"," +
+			"\"badge\":\"1\"," +
 			"\"body\":\"body\"," +
 			"\"body_loc_key\":\"bodyLocalizationKey\"," +
 			"\"body_loc_args\":[\"foo\",\"bar\"]," +

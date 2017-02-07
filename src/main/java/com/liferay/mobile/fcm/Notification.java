@@ -71,8 +71,8 @@ public class Notification {
 
 	public static class Builder {
 
-		public Builder badge(String badge) {
-			this.badge = badge;
+		public Builder badge(int badge) {
+			this.badge = String.valueOf(badge);
 			return this;
 		}
 
