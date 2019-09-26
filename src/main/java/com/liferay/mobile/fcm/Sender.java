@@ -14,6 +14,7 @@
 
 package com.liferay.mobile.fcm;
 
+import com.liferay.mobile.fcm.exception.UnsuccessfulResponse;
 import com.liferay.mobile.fcm.json.Json;
 
 import java.io.Reader;
@@ -41,6 +42,10 @@ public class Sender {
 	public Status send(Message message) throws Exception {
 		Request request = createRequest(message);
 		Response response = client.newCall(request).execute();
+
+		if (response.code() != 200) {
+			throw new UnsuccessfulResponse(response.code(), response.message());
+		}
 
 		Reader body = response.body().charStream();
 		Status status = statusFactory.createStatus(message, body);
